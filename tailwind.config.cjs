@@ -21,25 +21,24 @@ module.exports = {
         xs: [
           '12px',
           {
-            lineHeight: '14px',
+            lineHeight: '15px',
             letterSpacing: '2px',
           },
         ],
         sm: [
-          '15px',
+          '13px',
           {
-            lineHeight: '22px',
-            letterSpacing: '1px',
+            lineHeight: '23px',
           },
         ],
         base: [
-          '16px',
+          '15px',
           {
             lineHeight: '30px',
           },
         ],
         lg: [
-          '20px',
+          '18px',
 
           {
             lineHeight: '25px',
@@ -50,8 +49,7 @@ module.exports = {
           '24px',
 
           {
-            lineHeight: '25px',
-            letterSpacing: '2px',
+            fontWeight: '700',
           },
         ],
         '2xl': [
@@ -88,26 +86,26 @@ module.exports = {
       },
 
       textColor : {
-        base: 'var(--color-text-base)',
-        muted: 'var(--color-text-muted)',
-        accent : 'var(--color-text-accent)',
+        'color-base': 'var(--color-text-base)',
+        'color-muted': 'var(--color-text-muted)',
+        'color-accent' : 'var(--color-text-accent)',
       },
       
       backgroundColor: {
-        base: 'var(--color-background-base)',
-        muted: 'var(--color-background-muted)',
+        primary: 'var(--color-background-primary)',
+        secondary: 'var(--color-background-secondary)',
       },
 
       colors: {
-        primary: {
-          base: 'var(--color-primary)',
-          light: 'var(--color-primary-light)'
-        }, 
-        secondary: {
-          base: 'var(--color-secondary)',
-          light: 'var(--color-secondary-light)'
+        'primary-base': 'var(--color-primary)',
+        'primary-light': 'var(--color-primary-light)',
+         
+        'secondary-base': 'var(--color-secondary)',
+        'secondary-light': 'var(--color-secondary-light)',
+        'medium-grey': 'var(--color-medium-grey)',
+        border: {
+          base: 'var(--color-border-base)'
         },
-        border: 'var(--color-borde-baser)',
       },
     },
   },

@@ -31,20 +31,21 @@
     --color-text-muted: var(--color-medium-grey);
     --color-text-accent: var(--color-primary);
 
-    --color-background-base: var(--color-white);
-    --color-background-muted: var(--color-light-grey);
+    --color-background-primary: var(--color-white);
+    --color-background-secondary: var(--color-light-grey);
 
     --color-border-base: var(--color-border-light);
   }
 
   // dark theme
   .dark-color-theme {
+    
     --color-text-base: var(--color-white);
     --color-text-muted: var(--color-medium-grey);
     --color-text-accent: var(--color-primary-light);
 
-    --color-background-base: var(--color-dark-grey);
-    --color-background-muted: var(--color-very-dark-grey);
+    --color-background-primary: var(--color-dark-grey);
+    --color-background-secondary: var(--color-very-dark-grey);
     
     --color-border-base: var(--color-border-dark);
   }
