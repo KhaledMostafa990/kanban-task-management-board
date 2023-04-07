@@ -19,9 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="relative flex min-h-full w-full transition-all">
             <Sidebar />
 
-            <main className="w-full bg-background-secondary py-12">
-              {children}
-            </main>
+            <main className="w-full bg-background-secondary py-12">{children}</main>
           </div>
         </div>
       </body>

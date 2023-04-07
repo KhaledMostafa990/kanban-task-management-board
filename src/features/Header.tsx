@@ -17,12 +17,12 @@ export default function Header(props: HeroProps) {
   return (
     <header
       {...props}
-      className={`z-30 flex w-full border-b border-border-base bg-background-primary py-6 shadow-sm`}
+      className={`z-30 flex w-full border-b border-border-base bg-background-primary shadow-sm`}
     >
-      <div className="hidden w-[280px] justify-center md:flex">
+      <div className="hidden min-w-[260px] justify-center border-r border-border-base md:flex">
         <Logo />
       </div>
-      <div className="container">
+      <div className="container py-6">
         <Row className="flex items-center justify-between">
           {/* Board Heading */}
           <h1
