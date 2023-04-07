@@ -28,13 +28,14 @@ module.exports = {
         sm: [
           '13px',
           {
-            lineHeight: '23px',
+            lineHeight: '23px'            
           },
         ],
         base: [
           '15px',
           {
             lineHeight: '30px',
+            fontWeight: '700'
           },
         ],
         lg: [
@@ -86,17 +87,23 @@ module.exports = {
       },
 
       textColor : {
-        'color-base': 'var(--color-text-base)',
-        'color-muted': 'var(--color-text-muted)',
-        'color-accent' : 'var(--color-text-accent)',
       },
       
       backgroundColor: {
-        primary: 'var(--color-background-primary)',
-        secondary: 'var(--color-background-secondary)',
       },
-
+      
       colors: {
+        text: {
+         base: 'var(--color-text-base)',
+         muted: 'var(--color-text-muted)',
+         accent: 'var(--color-text-accent)',
+        },
+
+        background:{
+          primary: 'var(--color-background-primary)',
+          secondary: 'var(--color-background-secondary)',
+        },
+
         'primary-base': 'var(--color-primary)',
         'primary-light': 'var(--color-primary-light)',
          

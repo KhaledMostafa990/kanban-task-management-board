@@ -2,7 +2,7 @@ import './globals.scss';
 import { Plus_Jakarta_Sans } from 'next/font/google';
 
 import Header from '@/features/Header';
-// import Sidebar from '@/features/Sidebar';
+import Sidebar from '@/features/Sidebar';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -12,14 +12,17 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${plusJakartaSans.variable} dark-theme scroll-smooth font-primary`}>
-        <div className="flex overflow-hidden">
-          <div className="realtive order-2 flex flex-1 flex-col transition-all">
-            <Header />
-            <main className="h-full w-screen flex-1 bg-secondary py-12">{children}</main>
-          </div>
+      <body className={`${plusJakartaSans.variable} dark-theme  scroll-smooth font-primary`}>
+        <div className="h-screen min-h-screen overflow-hidden">
+          <Header />
 
-          {/* <Sidebar className="absolute left-[50%] top-[20%] order-1 h-fit min-w-[40%] flex-1 translate-x-[-50%] transform bg-base py-10 transition-transform" /> */}
+          <div className="relative flex min-h-full w-full transition-all">
+            <Sidebar />
+
+            <main className="w-full bg-background-secondary py-12">
+              {children}
+            </main>
+          </div>
         </div>
       </body>
     </html>

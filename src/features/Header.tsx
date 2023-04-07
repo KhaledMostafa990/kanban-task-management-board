@@ -1,6 +1,6 @@
 'use client';
 
-import { ButtonPrimary } from '@/components/base';
+import { ButtonPrimary, Logo } from '@/components/base';
 import { Row } from '@/components/layout';
 
 interface HeroProps extends React.HTMLAttributes<HTMLElement> {}
@@ -17,13 +17,16 @@ export default function Header(props: HeroProps) {
   return (
     <header
       {...props}
-      className={`z-30 w-screen border-b border-border-base bg-primary py-6 shadow-sm`}
+      className={`z-30 flex w-full border-b border-border-base bg-background-primary py-6 shadow-sm`}
     >
+      <div className="hidden w-[280px] justify-center md:flex">
+        <Logo />
+      </div>
       <div className="container">
         <Row className="flex items-center justify-between">
           {/* Board Heading */}
           <h1
-            className="flex w-[calc(100%/1.80)] max-w-fit items-center gap-2.5 text-color-base"
+            className="flex w-[calc(100%/1.80)] max-w-fit items-center gap-1.5 text-text-base"
             title={`${currentBoardName ?? 'No Board Available Yet'}`}
           >
             <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-xl md:w-full">
@@ -37,19 +40,19 @@ export default function Header(props: HeroProps) {
             )}
           </h1>
 
-          <div className="flex items-center justify-center gap-5">
+          <div className="flex items-center justify-center gap-4">
             {/* Add Task Button */}
-            <ButtonPrimary>Add New Task</ButtonPrimary>
+            <ButtonPrimary withIcon>Add New Task</ButtonPrimary>
 
             <div className="relative">
               {/* Board settings */}
               <ul
-                className={`absolute top-[calc(100%+2rem)] right-0 flex w-[200px] translate-x-[200%] flex-col gap-4 bg-primary p-3 transition-transform [&.active]:translate-x-0`}
+                className={`absolute top-[calc(100%+2rem)] right-0 flex w-[200px] translate-x-[200%] flex-col gap-4 bg-background-primary p-3 transition-transform [&.active]:translate-x-0`}
               >
                 {boardSettings?.map((setting, index) => (
                   <li
                     key={setting}
-                    className={`${index % 2 === 0 ? 'text-color-muted' : 'text-secondary-base'}`}
+                    className={`${index % 2 === 0 ? 'text-text-muted' : 'text-secondary-base'}`}
                   >
                     {setting}
                   </li>

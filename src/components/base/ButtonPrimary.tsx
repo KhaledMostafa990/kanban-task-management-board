@@ -17,18 +17,27 @@ export function ButtonPrimary({
   return (
     <>
       <button
-        className={`Capitalize relative flex items-center gap-6
-        rounded-full text-white ${disabled} md:y-3 bg-primary-base py-2 px-3
-        transition-all duration-500 md:px-5 md:py-2.5
+        className={`relative gap-4 rounded-full text-white md:flex md:items-center
+        md:justify-center ${disabled} bg-primary-base p-0 px-3 py-2 transition-all duration-500
+         md:gap-1 md:px-5 md:py-2.5
         ${classes}        
       `}
         onClick={onClick}
       >
-        <span className="hidden md:inline">{children}</span>
-        <div className={`flex h-full items-center justify-center`}>
-          <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg">
-            <path fill="#FFF" d="M7.368 12V7.344H12V4.632H7.368V0H4.656v4.632H0v2.712h4.656V12z" />
-          </svg>
+        <span className="hidden md:order-2 md:inline">{children}</span>
+
+        <div
+          className={`flex max-h-min items-center justify-center md:order-1 md:max-h-[3px] md:max-w-[3px]`}
+        >
+          {withIcon && (
+            <svg className="md:hidden" width="12" height="12" xmlns="http://www.w3.org/2000/svg">
+              <path
+                fill="#FFF"
+                d="M7.368 12V7.344H12V4.632H7.368V0H4.656v4.632H0v2.712h4.656V12z"
+              />
+            </svg>
+          )}
+          <span className="hidden md:block">+</span>
         </div>
       </button>
     </>
