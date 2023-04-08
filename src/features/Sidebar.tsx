@@ -18,9 +18,9 @@ export default function Sidebar() {
   return (
     <aside
       id="sidebar"
-      className={`active absolute left-0 top-[10%] flex h-fit w-[65%] max-w-[450px] translate-x-[-100%]
-      flex-col gap-6 rounded-md bg-background-primary py-6 transition-transform
-      md:top-0 md:h-[calc(100vh-93px)] md:max-w-[260px] md:justify-between md:rounded-none
+      className={`active absolute left-0 top-[10%] z-50 flex h-fit w-[65%] max-w-[450px]
+      flex-1 translate-x-[-100%] flex-col gap-6 rounded-md bg-background-primary py-6
+      transition-transform md:top-0 md:h-[calc(100vh-93px)] md:min-w-[260px] md:max-w-[260px] md:justify-between md:rounded-none
       [&.active]:left-[50%] [&.active]:translate-x-[-50%] md:[&.active]:relative md:[&.active]:left-0 md:[&.active]:translate-x-0`}
     >
       <div className="flex flex-col gap-6">
