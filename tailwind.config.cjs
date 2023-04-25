@@ -18,40 +18,48 @@ module.exports = {
       },
 
       fontSize: {
-        xs: [
+        'body-xs': [
           '12px',
           {
             lineHeight: '15px',
-            letterSpacing: '2px',
+            fontWeight: 700
+          },
+        ],
+        'body-sm': [
+          '13px',
+          {
+            lineHeight: '23px',
+            fontWeight: 500
           },
         ],
         sm: [
-          '13px',
+          '12px',
           {
-            lineHeight: '23px'            
+            lineHeight: '15px',            
+            letterSpacing: '2.4px'
           },
         ],
         base: [
           '15px',
           {
-            lineHeight: '30px',
-            fontWeight: '700'
+            lineHeight: '19px',
+            fontWeight: '700',
           },
         ],
         lg: [
           '18px',
 
           {
-            lineHeight: '25px',
-            letterSpacing: '2px',
+            lineHeight: '23px',
           },
         ],
-        xl: [
+        xl: [        
           '24px',
-
           {
+            lineHeight: '30px',
             fontWeight: '700',
           },
+     
         ],
         '2xl': [
           '28px',
@@ -93,6 +101,9 @@ module.exports = {
       },
       
       colors: {
+        opacity: {
+          '25': '0.25'
+        },
         text: {
          base: 'var(--color-text-base)',
          muted: 'var(--color-text-muted)',
@@ -104,15 +115,30 @@ module.exports = {
           secondary: 'var(--color-background-secondary)',
         },
 
-        'primary-base': 'var(--color-primary)',
+        primary: {
+          base: 'rgb(var(--color-primary))',
+          '25': 'rgb(var(--color-primary) , 25%)',
+          '75': 'rgb(var(--color-primary) , 75%)'
+        },
         'primary-light': 'var(--color-primary-light)',
          
-        'secondary-base': 'var(--color-secondary)',
+        'secondary-base': 'rgb(var(--color-secondary))',
         'secondary-light': 'var(--color-secondary-light)',
         'medium-grey': 'var(--color-medium-grey)',
+        'danger': 'rgb(var(--color-secondary))',
+
+        'btn-primary': 'var(--color-btn-primary)',
+        'btn-primary-hover': 'var(--color-btn-primary-hover)',
+        'btn-secondary': 'var(--color-btn-secondary)',
+        'btn-secondary-hover': 'var(--color-btn-secondary-hover)',
+        'btn-danger': 'var(--color-btn-danger)',
+        'btn-danger-hover': 'var(--color-btn-danger-hover)',
+
         border: {
-          base: 'var(--color-border-base)'
+          base: 'var(--color-border-base)',
+          input: 'var(--color-border-input)'
         },
+
       },
     },
   },

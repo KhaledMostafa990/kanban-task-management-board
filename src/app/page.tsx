@@ -1,13 +1,12 @@
-import { useState } from 'React';
+'use client';
 
-import { ButtonPrimary, Overlay } from '@/components/base';
+import { Button, BoardColumn } from '@/components/base';
+
 import { Row } from '@/components/layout';
 import { boards } from '@/app/store/data.json';
 
 export default function Home() {
   const boardColumns = boards[0].columns;
-  const [modelOpen, setModelOpen] = useState(true);
-
   return (
     <>
       <section className="h-full w-full">
@@ -18,7 +17,9 @@ export default function Home() {
                 <h2 className="text-center text-lg font-bold text-text-muted">
                   This board is empty. Create a new column to get started.
                 </h2>
-                <ButtonPrimary withIcon>Add New Column</ButtonPrimary>
+                <Button type="primary" withIcon>
+                  Add New Column
+                </Button>
               </div>
             ) : (
               <div className="flex h-full gap-6">
@@ -42,41 +43,6 @@ export default function Home() {
           </Row>
         </div>
       </section>
-
-      {modelOPen && (
-        <>
-          <div>
-            <Overlay />
-          </div>
-        </>
-      )}
     </>
-  );
-}
-
-function BoardColumn({ column }: any) {
-  return (
-    <div className="flex flex-col gap-6">
-      <h2 className="text-base font-bold text-text-muted">
-        {column.name} ({column.tasks.length})
-      </h2>
-
-      <div className="flex flex-col gap-4">
-        {column.tasks.map((task: any) => (
-          <div
-            key={task.id}
-            className="flex w-[280px] max-w-[280px] flex-col gap-2.5 rounded-md bg-background-primary px-3 py-4"
-          >
-            <h3 className="text-base font-bold text-text-base">{task.title}</h3>
-            <p className="text-sm text-text-muted">
-              {`${task.subtasks.filter((subtask: any) => subtask.isCompleted).length} `}
-              of
-              {` ${task.subtasks.length} `}
-              subtasks
-            </p>
-          </div>
-        ))}
-      </div>
-    </div>
   );
 }

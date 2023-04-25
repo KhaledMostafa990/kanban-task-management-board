@@ -1,14 +1,9 @@
 'use client';
 
-import { ButtonPrimary, Logo } from '@/components/base';
+import { Button, Logo } from '@/components/base';
 import { Row } from '@/components/layout';
 
 interface HeroProps extends React.HTMLAttributes<HTMLElement> {}
-
-// interface HeroData {
-//   boardSettings?: string[];
-//   currentBoardName?: string;
-// }
 
 export default function Header(props: HeroProps) {
   const boardSettings = ['Edit Board', 'Delete Board'];
@@ -22,6 +17,7 @@ export default function Header(props: HeroProps) {
       <div className="hidden min-w-[260px] justify-center border-r border-border-base md:flex">
         <Logo />
       </div>
+
       <div className="container py-6">
         <Row className="flex items-center justify-between">
           {/* Board Heading */}
@@ -42,7 +38,9 @@ export default function Header(props: HeroProps) {
 
           <div className="flex items-center justify-center gap-4">
             {/* Add Task Button */}
-            <ButtonPrimary withIcon>Add New Task</ButtonPrimary>
+            <Button type="primary" withIcon>
+              Add New Task
+            </Button>
 
             <div className="relative">
               {/* Board settings */}

@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans } from 'next/font/google';
 
 import Header from '@/features/Header';
 import Sidebar from '@/features/Sidebar';
+import Model from '@/components/layout/Model';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -22,6 +23,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <main className="w-full bg-background-secondary py-12">{children}</main>
           </div>
         </div>
+
+        <Model />
       </body>
     </html>
   );

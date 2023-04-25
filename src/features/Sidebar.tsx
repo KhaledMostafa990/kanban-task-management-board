@@ -1,6 +1,7 @@
 'use client';
 
-import { HTMLProps, useState } from 'react';
+import { BoardListItem } from '@/components/base';
+import { useState } from 'react';
 
 export default function Sidebar() {
   const boards: string[] = ['Board 1', 'Board 2', 'Board 3', 'Board 4'];
@@ -18,13 +19,13 @@ export default function Sidebar() {
   return (
     <aside
       id="sidebar"
-      className={`active absolute left-0 top-[10%] z-50 flex h-fit w-[65%] max-w-[450px]
+      className={`absolute left-0 top-[10%] z-40 flex h-fit w-[65%] max-w-[450px]
       flex-1 translate-x-[-100%] flex-col gap-6 rounded-md bg-background-primary py-6
       transition-transform md:top-0 md:h-[calc(100vh-93px)] md:min-w-[260px] md:max-w-[260px] md:justify-between md:rounded-none
       [&.active]:left-[50%] [&.active]:translate-x-[-50%] md:[&.active]:relative md:[&.active]:left-0 md:[&.active]:translate-x-0`}
     >
       <div className="flex flex-col gap-6">
-        <p className="pl-6 text-xs text-text-muted">All Boards {`(${boards.length})`}</p>
+        <p className="pl-6 text-body-xs text-text-muted">All Boards {`(${boards.length})`}</p>
 
         {/* Boards List */}
         <ul className="flex flex-col gap-4">
@@ -40,44 +41,50 @@ export default function Sidebar() {
         </ul>
       </div>
 
-      <div className="relative px-6 md:flex md:flex-col md:gap-5">
+      <div className="relative md:flex md:flex-col md:gap-5">
         {/* Toggle Theme */}
-        <div className="flex w-full items-center justify-center gap-4 rounded-md bg-background-secondary py-3 px-4">
-          <svg width="19" height="19" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M9.167 15.833a.833.833 0 0 1 .833.834v.833a.833.833 0 0 1-1.667 0v-.833a.833.833 0 0 1 .834-.834ZM3.75 13.75a.833.833 0 0 1 .59 1.422l-1.25 1.25a.833.833 0 0 1-1.18-1.178l1.25-1.25a.833.833 0 0 1 .59-.244Zm10.833 0c.221 0 .433.088.59.244l1.25 1.25a.833.833 0 0 1-1.179 1.178l-1.25-1.25a.833.833 0 0 1 .59-1.422ZM9.167 5a4.167 4.167 0 1 1 0 8.334 4.167 4.167 0 0 1 0-8.334Zm-7.5 3.333a.833.833 0 0 1 0 1.667H.833a.833.833 0 1 1 0-1.667h.834Zm15.833 0a.833.833 0 0 1 0 1.667h-.833a.833.833 0 0 1 0-1.667h.833Zm-1.667-6.666a.833.833 0 0 1 .59 1.422l-1.25 1.25a.833.833 0 1 1-1.179-1.178l1.25-1.25a.833.833 0 0 1 .59-.244Zm-13.333 0c.221 0 .433.088.59.244l1.25 1.25a.833.833 0 0 1-1.18 1.178L1.91 3.09a.833.833 0 0 1 .59-1.422ZM9.167 0A.833.833 0 0 1 10 .833v.834a.833.833 0 1 1-1.667 0V.833A.833.833 0 0 1 9.167 0Z"
-              fill="#828FA3"
-            />
-          </svg>
+        <div className="px-6">
+          <div className="flex w-full items-center justify-center gap-4 rounded-md bg-background-secondary py-3 px-4">
+            <svg width="19" height="19" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M9.167 15.833a.833.833 0 0 1 .833.834v.833a.833.833 0 0 1-1.667 0v-.833a.833.833 0 0 1 .834-.834ZM3.75 13.75a.833.833 0 0 1 .59 1.422l-1.25 1.25a.833.833 0 0 1-1.18-1.178l1.25-1.25a.833.833 0 0 1 .59-.244Zm10.833 0c.221 0 .433.088.59.244l1.25 1.25a.833.833 0 0 1-1.179 1.178l-1.25-1.25a.833.833 0 0 1 .59-1.422ZM9.167 5a4.167 4.167 0 1 1 0 8.334 4.167 4.167 0 0 1 0-8.334Zm-7.5 3.333a.833.833 0 0 1 0 1.667H.833a.833.833 0 1 1 0-1.667h.834Zm15.833 0a.833.833 0 0 1 0 1.667h-.833a.833.833 0 0 1 0-1.667h.833Zm-1.667-6.666a.833.833 0 0 1 .59 1.422l-1.25 1.25a.833.833 0 1 1-1.179-1.178l1.25-1.25a.833.833 0 0 1 .59-.244Zm-13.333 0c.221 0 .433.088.59.244l1.25 1.25a.833.833 0 0 1-1.18 1.178L1.91 3.09a.833.833 0 0 1 .59-1.422ZM9.167 0A.833.833 0 0 1 10 .833v.834a.833.833 0 1 1-1.667 0V.833A.833.833 0 0 1 9.167 0Z"
+                fill="#828FA3"
+              />
+            </svg>
 
-          <button className="pointer-events-auto h-fit w-fit rounded-full bg-primary-base p-1 xl:p-1.5">
-            <input
-              id="toggle-checkbox"
-              type="checkbox"
-              value={activeTheme}
-              onClick={toggleActiveTheme}
-              checked={activeTheme === 'dark'}
-              className="relative block h-6 min-h-full w-12 min-w-full cursor-pointer appearance-none rounded-full bg-primary-base
+            <button className="pointer-events-auto h-fit w-fit rounded-full bg-primary-base p-1 xl:p-1.5">
+              <input
+                id="toggle-checkbox"
+                type="checkbox"
+                value={activeTheme}
+                onClick={toggleActiveTheme}
+                checked={activeTheme === 'dark'}
+                className="relative block h-6 min-h-full w-12 min-w-full cursor-pointer appearance-none rounded-full bg-primary-base
               before:absolute before:h-full before:w-1/2 before:rounded-full before:bg-white before:shadow-md
               before:shadow-neutral-500 before:transition-transform before:duration-500 checked:before:translate-x-full"
-            />
+              />
 
-            <label htmlFor="toggle-checlbox" className="sr-only">
-              toggle pricing card from monthly to annual
-            </label>
-          </button>
+              <label htmlFor="toggle-checlbox" className="sr-only">
+                toggle pricing card from monthly to annual
+              </label>
+            </button>
 
-          <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M6.474.682c.434-.11.718.406.481.78A6.067 6.067 0 0 0 6.01 4.72c0 3.418 2.827 6.187 6.314 6.187.89.002 1.77-.182 2.584-.54.408-.18.894.165.724.57-1.16 2.775-3.944 4.73-7.194 4.73-4.292 0-7.771-3.41-7.771-7.615 0-3.541 2.466-6.518 5.807-7.37Zm8.433.07c.442-.294.969.232.674.674l-.525.787a1.943 1.943 0 0 0 0 2.157l.525.788c.295.441-.232.968-.674.673l-.787-.525a1.943 1.943 0 0 0-2.157 0l-.786.525c-.442.295-.97-.232-.675-.673l.525-.788a1.943 1.943 0 0 0 0-2.157l-.525-.787c-.295-.442.232-.968.674-.673l.787.525a1.943 1.943 0 0 0 2.157 0Z"
-              fill="#828FA3"
-            />
-          </svg>
+            <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M6.474.682c.434-.11.718.406.481.78A6.067 6.067 0 0 0 6.01 4.72c0 3.418 2.827 6.187 6.314 6.187.89.002 1.77-.182 2.584-.54.408-.18.894.165.724.57-1.16 2.775-3.944 4.73-7.194 4.73-4.292 0-7.771-3.41-7.771-7.615 0-3.541 2.466-6.518 5.807-7.37Zm8.433.07c.442-.294.969.232.674.674l-.525.787a1.943 1.943 0 0 0 0 2.157l.525.788c.295.441-.232.968-.674.673l-.787-.525a1.943 1.943 0 0 0-2.157 0l-.786.525c-.442.295-.97-.232-.675-.673l.525-.788a1.943 1.943 0 0 0 0-2.157l-.525-.787c-.295-.442.232-.968.674-.673l.787.525a1.943 1.943 0 0 0 2.157 0Z"
+                fill="#828FA3"
+              />
+            </svg>
+          </div>
         </div>
 
         {/* Toggle Sidebar on tablet & desktop */}
-        <div className="hidden items-center justify-center md:flex">
-          <button className="active relative left-[72%] flex items-center justify-center gap-4 rounded-tr-full rounded-br-full bg-primary-base px-4 py-2.5 text-text-muted transition-all [&.active]:static [&.active]:left-[unset]  [&.active]:bg-transparent [&.active]:py-0">
+        <div className="hidden items-center justify-center pr-6 md:flex">
+          <button
+            className="relative left-[72%] flex items-center justify-center gap-4 rounded-tr-full rounded-br-full
+            bg-primary-base px-4 py-2.5 text-text-muted transition-all hover:bg-btn-secondary [&.active]:static
+            [&.active]:left-[unset] [&.active]:w-full [&.active]:bg-transparent [&.active]:hover:bg-btn-secondary"
+          >
             {isSidebarHidden ? (
               <svg width="18" height="16" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -93,29 +100,10 @@ export default function Sidebar() {
                 />
               </svg>
             )}
-            <span className="active hidden [&.active]:inline-block">Hide Sidebar</span>
+            <span className="hidden [&.active]:inline-block">Hide Sidebar</span>
           </button>
         </div>
       </div>
     </aside>
-  );
-}
-function BoardListItem(props: HTMLProps<HTMLButtonElement>) {
-  const { className, children } = props ?? {};
-  return (
-    <button
-      className={` ${
-        className ?? ''
-      } flex w-[85%] items-center gap-2.5 rounded-tr-3xl rounded-br-3xl bg-transparent py-2.5 pl-6 text-base text-text-muted hover:bg-background-secondary hover:text-primary-base [&.active]:bg-primary-base [&.active]:text-white`}
-    >
-      <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M0 2.889A2.889 2.889 0 0 1 2.889 0H13.11A2.889 2.889 0 0 1 16 2.889V13.11A2.888 2.888 0 0 1 13.111 16H2.89A2.889 2.889 0 0 1 0 13.111V2.89Zm1.333 5.555v4.667c0 .859.697 1.556 1.556 1.556h6.889V8.444H1.333Zm8.445-1.333V1.333h-6.89A1.556 1.556 0 0 0 1.334 2.89V7.11h8.445Zm4.889-1.333H11.11v4.444h3.556V5.778Zm0 5.778H11.11v3.11h2a1.556 1.556 0 0 0 1.556-1.555v-1.555Zm0-7.112V2.89a1.555 1.555 0 0 0-1.556-1.556h-2v3.111h3.556Z"
-          fill="#828FA3"
-        />
-      </svg>
-
-      {children}
-    </button>
   );
 }
