@@ -4,6 +4,7 @@ import { Plus_Jakarta_Sans } from 'next/font/google';
 import Header from '@/features/Header';
 import Sidebar from '@/features/Sidebar';
 import Model from '@/components/layout/Model';
+import ReduxProvider from './store/ReduxProvider';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -13,18 +14,20 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${plusJakartaSans.variable} dark-theme  scroll-smooth font-primary`}>
-        <div className="h-screen min-h-screen overflow-hidden">
-          <Header />
+      <body className={`${plusJakartaSans.variable} scroll-smooth font-primary`}>
+        <ReduxProvider>
+          <div className="h-screen min-h-screen overflow-hidden dark-theme">
+            <Header />
 
-          <div className="relative flex min-h-full w-full transition-all">
-            <Sidebar />
-
-            <main className="w-full bg-background-secondary py-12">{children}</main>
+            <div className="relative flex min-h-full w-full transition-all">
+              <Sidebar />
+              <main className="w-full bg-background-secondary py-12">{children}</main>
+            </div>
+            
+          <Model />
           </div>
-        </div>
 
-        <Model />
+        </ReduxProvider>
       </body>
     </html>
   );

@@ -1,7 +1,6 @@
 'use client';
 
 import { boards } from '@/app/store/data.json';
-import { useState } from 'react';
 import {
   CreateBoard,
   CreateTask,
@@ -12,10 +11,13 @@ import {
   Overlay,
   ViewTask,
 } from '../base';
+import { useAppDispatch, useAppSelector } from '@/app/store';
+import { toggleModelView } from '@/app/store/boardSidebar';
 
 export default function Model() {
-  const [modelOpen] = useState<boolean>(false);
-  const [currentView] = useState<string>('createTask');
+  const modelOpen = useAppSelector(state => state.boardSidebar.models.open)
+  const modelView =  useAppSelector(state => state.boardSidebar.models.modelView);
+  const dispatch = useAppDispatch();
 
   const firstBoard = boards[0];
   const taskExample = boards[0].columns[1].tasks[5];
@@ -36,10 +38,10 @@ export default function Model() {
 
   return (
     <div className="bg-text-muted/50 fixed left-0 top-0 z-50 flex h-screen w-screen items-center justify-center">
-      <Overlay />
+      <Overlay onClick={() => dispatch(toggleModelView())}/>
 
       <div className=" absolute top-[11%] z-50 flex w-[340px] flex-col gap-6 bg-background-primary px-4 py-6 lg:w-[480px]">
-        {modelContents[currentView as keyof typeof modelContents]}
+        {modelContents[modelView as keyof typeof modelContents]}
       </div>
     </div>
   );

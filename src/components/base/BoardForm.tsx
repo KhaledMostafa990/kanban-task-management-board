@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button } from './Button';
-import { Board } from './types';
+import { Board } from '../../app/types';
 
 export function BoardForm({ defaultValues }: { defaultValues?: Board }) {
   const [subtasks] = useState(

@@ -3,10 +3,12 @@
 import { Button, BoardColumn } from '@/components/base';
 
 import { Row } from '@/components/layout';
-import { boards } from '@/app/store/data.json';
+import { useAppSelector } from './store';
 
 export default function Home() {
-  const boardColumns = boards[0].columns;
+  const activeBoard = useAppSelector(state => state.boardSidebar.activeBoard);
+  const boardColumns = activeBoard.columns;
+  
   return (
     <>
       <section className="h-full w-full">

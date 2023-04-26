@@ -1,5 +1,5 @@
 import { DeleteView } from './DeleteView';
-import { Task } from './types';
+import { Task } from '../../app/types';
 
 export function DeleteTask({ task }: { task: Task; columns: any[] }) {
   return (

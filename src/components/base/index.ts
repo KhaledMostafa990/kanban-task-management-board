@@ -9,7 +9,7 @@ export * from './EditBoard';
 export * from './EditTask';
 export * from './TaskForm';
 export * from './BoardForm';
-export * from './types';
+export * from '../../app/types';
 export * from './DeleteView';
 export * from './DeleteTask';
 export * from './DeleteBoard';
