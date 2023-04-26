@@ -7,10 +7,10 @@
   :root {
     // All colors
     
-    --color-primary: #635FC7;
+    --color-primary: 99, 95, 199;
     --color-primary-light: #A8A4FF;
     
-    --color-secondary: #EA5555;
+    --color-secondary: 234, 85, 85;
     --color-secondary-light: #FF9898;
 
     --color-light-grey: #F4F7FD;
@@ -29,24 +29,36 @@
     // default theme
     --color-text-base: var(--color-black);
     --color-text-muted: var(--color-medium-grey);
-    --color-text-accent: var(--color-primary);
+    --color-text-accent: rgb(var(--color-primary));
 
-    --color-background-base: var(--color-white);
-    --color-background-muted: var(--color-light-grey);
+    --color-background-primary: var(--color-white);
+    --color-background-secondary: var(--color-light-grey);
 
     --color-border-base: var(--color-border-light);
-  }
+    --color-border-input: rgba(130,143,163, 0.25);
 
+    --color-btn-primary: rgb(var(--color-primary));
+    --color-btn-primary-hover: var(--color-primary-light);
+    --color-btn-secondary: rgb(var(--color-primary), 10%);
+    --color-btn-secondary-hover: rgb(var(--color-primary), 25%);
+    --color-btn-danger: rgb(var(--color-secondary));
+    --color-btn-danger-hover: var(--color-secondary-light);
+  }
+  
   // dark theme
   .dark-color-theme {
+    
     --color-text-base: var(--color-white);
     --color-text-muted: var(--color-medium-grey);
     --color-text-accent: var(--color-primary-light);
-
-    --color-background-base: var(--color-dark-grey);
-    --color-background-muted: var(--color-very-dark-grey);
+    
+    --color-background-primary: var(--color-dark-grey);
+    --color-background-secondary: var(--color-very-dark-grey);
     
     --color-border-base: var(--color-border-dark);
+
+    --color-btn-secondary: var(--color-white);
+    --color-btn-secondary-hover: var(--color-white);    
   }
 
   // @media (prefers-color-scheme: dark) {
@@ -61,6 +73,5 @@
 }
 
 .container {
-  @apply grid grid-cols-12 max-w-[100vw] lg:w-[1111px] mx-auto;
-  max-width: 100vw;
+  @apply grid grid-cols-12 max-w-[100vw] lg:max-w-full 2xl:w-[1111px] mx-auto;  
 }
