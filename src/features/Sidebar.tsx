@@ -1,23 +1,28 @@
 'use client';
 
 import { useAppSelector, useAppDispatch } from '@/app/store';
-import { createNewBoard, toggleActiveBoard, toggleSidebar, toggleTheme } from '@/app/store/boardSidebar';
+import {
+  openBoardModel,
+  toggleActiveBoard,
+  toggleSidebar,
+  toggleTheme,
+} from '@/app/store/boardSlice';
 
 import { BoardListItem } from '@/components/base';
 
-export default function Sidebar() {  
+export default function Sidebar() {
   const dispatch = useAppDispatch();
-  const boards =  useAppSelector((state) => state.boardSidebar.boards);  
-  const activeBoard =  useAppSelector((state) => state.boardSidebar.activeBoard);  
-  const isSidebarOpen = useAppSelector((state) => state.boardSidebar.sidebarActive);  
+  const boards = useAppSelector((state) => state.boardSidebar.boards);
+  const activeBoard = useAppSelector((state) => state.boardSidebar.activeBoard);
+  const isSidebarOpen = useAppSelector((state) => state.boardSidebar.sidebarActive);
 
   const sidebarState = isSidebarOpen && 'active';
-  const activeTheme = useAppSelector(state => state.boardSidebar.theme);
-  
+  const activeTheme = useAppSelector((state) => state.boardSidebar.theme);
+
   function toggleActiveTheme(e: any) {
     if (e.target.value === 'dark') {
       dispatch(toggleTheme('light'));
-    } else {      
+    } else {
       dispatch(toggleTheme('dark'));
     }
   }
@@ -35,10 +40,10 @@ export default function Sidebar() {
 
         {/* Boards List */}
         <ul className="flex flex-col gap-4">
-          {boards.map((board, idx) => (
+          {boards.map((board) => (
             <li key={board.name}>
               <BoardListItem
-                onClick={()=> dispatch(toggleActiveBoard(board.name))}
+                onClick={() => dispatch(toggleActiveBoard(board.name))}
                 className={`${board.name === activeBoard.name && 'active'}`}
               >
                 {board.name}
@@ -47,7 +52,9 @@ export default function Sidebar() {
           ))}
 
           <li>
-            <BoardListItem onClick={() => dispatch(createNewBoard())}>Create New Board</BoardListItem>
+            <BoardListItem onClick={() => dispatch(openBoardModel('createBoard'))}>
+              Create New Board
+            </BoardListItem>
           </li>
         </ul>
       </div>
@@ -113,7 +120,9 @@ export default function Sidebar() {
                 />
               </svg>
             )}
-            <span className={`${sidebarState} hidden [&.active]:inline-block text-xs`}>Hide Sidebar</span>
+            <span className={`${sidebarState} hidden text-xs [&.active]:inline-block`}>
+              Hide Sidebar
+            </span>
           </button>
         </div>
       </div>

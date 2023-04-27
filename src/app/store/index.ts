@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import boardSidebar, { SidebarState } from "./boardSidebar";
+import boardSidebar, { SidebarState } from "./boardSlice";
 import { useDispatch, useSelector } from 'react-redux'
 import type { TypedUseSelectorHook } from 'react-redux'
 

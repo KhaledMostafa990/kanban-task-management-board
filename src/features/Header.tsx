@@ -1,24 +1,23 @@
 'use client';
-import {useState} from 'react';
+
+import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/app/store';
 
-import { toggleSidebar } from '@/app/store/boardSidebar';
+import { openBoardModel, toggleSidebar } from '@/app/store/boardSlice';
 import { Button, Logo } from '@/components/base';
 import { Row } from '@/components/layout';
 
-interface HeroProps extends React.HTMLAttributes<HTMLElement> {}
-
-export default function Header(props: HeroProps) {
+export default function Header() {
   const dispatch = useAppDispatch();
-  const activeBoard = useAppSelector(state => state.boardSidebar.activeBoard);
+  const activeBoard = useAppSelector((state) => state.boardSidebar.activeBoard);
   const currentBoardName = activeBoard.name;
   const boardSettings = ['Edit Board', 'Delete Board'];
-  const [boardSettingOpen, setBoardSettingOpen] = useState<boolean>(false); 
+  const [boardSettingOpen, setBoardSettingOpen] = useState<boolean>(false);
   // const boardSettingListRef = useRef<HTMLELement | null>(null);
 
   const showBoardSetting = () => {
     setBoardSettingOpen(!boardSettingOpen);
-  }
+  };
 
   return (
     <header
@@ -40,9 +39,13 @@ export default function Header(props: HeroProps) {
             </span>
 
             {currentBoardName && (
-              <svg 
+              <svg
                 onClick={() => dispatch(toggleSidebar())}
-                className='cursor-pointer md:hidden' width="10" height="7" xmlns="http://www.w3.org/2000/svg">
+                className="cursor-pointer md:hidden"
+                width="10"
+                height="7"
+                xmlns="http://www.w3.org/2000/svg"
+              >
                 <path stroke="#635FC7" stroke-width="2" fill="none" d="m1 1 4 4 4-4" />
               </svg>
             )}
@@ -58,7 +61,9 @@ export default function Header(props: HeroProps) {
               {/* Board settings */}
               <ul
                 // ref={boardSettingListRef}
-                className={`${boardSettingOpen && 'active'} z-50 absolute top-[calc(100%+2rem)] right-0 flex w-[200px] translate-x-[200%]
+                className={`${
+                  boardSettingOpen && 'active'
+                } absolute top-[calc(100%+2rem)] right-0 z-50 flex w-[200px] translate-x-[200%]
                 flex-col gap-4 bg-background-primary p-3 transition-transform [&.active]:translate-x-0`}
               >
                 {boardSettings?.map((setting, index) => (
@@ -66,7 +71,11 @@ export default function Header(props: HeroProps) {
                     key={setting}
                     className={`${index % 2 === 0 ? 'text-text-muted' : 'text-secondary-base'}`}
                   >
-                    {setting}
+                    <button onClick={() => dispatch(openBoardModel(
+                        setting.charAt(0).toLowerCase() + setting.slice(1).split(' ').join('')
+                      ))}>
+                      {setting}
+                    </button>
                   </li>
                 ))}
               </ul>

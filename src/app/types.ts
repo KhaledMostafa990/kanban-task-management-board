@@ -5,12 +5,12 @@ export interface Task {
   subtasks: { title: string; isCompleted: boolean }[];
 }
 
-interface Column {
+export interface Column {
   name: string;
-  tasks: Task[];
+  tasks: Task[] | [];
 }
 
 export interface Board {
   name: string;
-  columns: Column[];
+  columns: Column[] | [];
 }
