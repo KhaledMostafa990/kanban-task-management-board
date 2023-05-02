@@ -1,6 +1,17 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { boards } from './data.json';
 import { Board } from '../types';
+import { boardFormInfo } from './CONSTANT';
+
+export interface FormInput {
+  label?: string;
+  id?: string;
+  name?: string;
+  type?: string;
+  value?: string;
+  required?: boolean;
+  inputs?: FormInput[];
+}
 
 export interface BoardSidebarState {
   sidebarActive: boolean;
@@ -11,6 +22,7 @@ export interface BoardSidebarState {
     open: boolean;
     modelView: string;
   };
+  formInputs: FormInput[];
 }
 
 const boardState = {
@@ -22,6 +34,7 @@ const boardState = {
     open: false,
     modelView: '',
   },
+  formInputs: boardFormInfo,
 } as BoardSidebarState;
 
 const boardSidebar = createSlice({
@@ -32,7 +45,7 @@ const boardSidebar = createSlice({
       state.sidebarActive = !state.sidebarActive;
     },
 
-    toggleActiveBoard(state, actions: PayloadAction<string>) {
+    toggleActiveBoard(state, actions: PayloadAction<string | null>) {
       [state.activeBoard] = state.boards.filter((board: Board) => board.name === actions.payload);
       return state;
     },
@@ -54,33 +67,35 @@ const boardSidebar = createSlice({
 
     openBoardModel(state, actions: PayloadAction<string>) {
       state.models.open = !state.models.open;
-      console.log(actions.payload)
       state.models.modelView = actions.payload;
     },
 
     createNewBoard(state, actions: PayloadAction<Board>) {
-      if(state.boards.find(board => board.name === actions.payload.name)) {
+      const exsitingBoard = state.boards.find((board) => board.id === actions.payload.id);
+      if (exsitingBoard) {
         return {
           ...state,
-          boards: [
-            ...state.boards.filter(b => b.name !== actions.payload.name)
-            .concat(actions.payload)
-          ]
-        }
-      } else {
-        return {
-          ...state,
-          boards: [...state.boards, actions.payload],
+          boards: state.boards.map((board) => {
+            if (board.id === actions.payload.id) {
+              return actions.payload;
+            }
+            return board;
+          }),
         };
       }
+
+      return {
+        ...state,
+        boards: [...state.boards, actions.payload],
+      };
     },
 
-    // editBoard(state, actions: PayloadAction<Board>) {
-    //   return {
-    //     ...state,
-    //     boards: [...state.boards, ],
-    //   };
-    // },
+    deleteBoard(state, actions: PayloadAction<string>) {
+      return {
+        ...state,
+        boards: state.boards.filter((board) => board.id !== actions.payload),
+      };
+    },
   },
 });
 
@@ -92,4 +107,5 @@ export const {
   toggleTheme,
   openBoardModel,
   createNewBoard,
+  deleteBoard,
 } = boardSidebar.actions;

@@ -32,7 +32,7 @@ export default function Model() {
 
     createBoard: <CreateBoard />,
     editBoard: <EditBoard board={activeBoard} />,
-    deleteBoard: <DeleteBoard board={activeBoard} columns={columns} />,
+    deleteBoard: <DeleteBoard board={activeBoard} />,
   };
 
   if (!modelOpen) return null;

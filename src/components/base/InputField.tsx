@@ -7,6 +7,8 @@ export function InputField({
   placeholder,
   value,
   className,
+  onChange,
+  onBlur,
 }: {
   type: string;
   id?: string;
@@ -14,6 +16,8 @@ export function InputField({
   placeholder: string;
   value: string | null | undefined;
   className?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }) {
   return (
     <Field
@@ -26,6 +30,8 @@ export function InputField({
       name={name}
       placeholder={placeholder}
       value={value}
+      onChange={onChange}
+      onBlur={onBlur}
     />
   );
 }

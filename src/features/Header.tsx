@@ -10,10 +10,9 @@ import { Row } from '@/components/layout';
 export default function Header() {
   const dispatch = useAppDispatch();
   const activeBoard = useAppSelector((state) => state.boardSidebar.activeBoard);
-  const currentBoardName = activeBoard.name;
-  const boardSettings = ['Edit Board', 'Delete Board'];
   const [boardSettingOpen, setBoardSettingOpen] = useState<boolean>(false);
-  // const boardSettingListRef = useRef<HTMLELement | null>(null);
+
+  const boardSettings = ['Edit Board', 'Delete Board'];
 
   const showBoardSetting = () => {
     setBoardSettingOpen(!boardSettingOpen);
@@ -32,13 +31,13 @@ export default function Header() {
           {/* Board Heading */}
           <h1
             className="flex w-[calc(100%/1.80)] max-w-fit items-center gap-1.5 text-text-base"
-            title={`${currentBoardName ?? 'No Board Available Yet'}`}
+            title={`${activeBoard?.name || 'No Board Available Yet'}`}
           >
             <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-xl md:w-full">
-              {currentBoardName ?? 'No Board Available Yet'}
+              {activeBoard?.name || 'No Board Available Yet'}
             </span>
 
-            {currentBoardName && (
+            {activeBoard?.name && (
               <svg
                 onClick={() => dispatch(toggleSidebar())}
                 className="cursor-pointer md:hidden"
@@ -60,7 +59,6 @@ export default function Header() {
             <div className="relative">
               {/* Board settings */}
               <ul
-                // ref={boardSettingListRef}
                 className={`${
                   boardSettingOpen && 'active'
                 } absolute top-[calc(100%+2rem)] right-0 z-50 flex w-[200px] translate-x-[200%]
@@ -71,9 +69,15 @@ export default function Header() {
                     key={setting}
                     className={`${index % 2 === 0 ? 'text-text-muted' : 'text-secondary-base'}`}
                   >
-                    <button onClick={() => dispatch(openBoardModel(
-                        setting.charAt(0).toLowerCase() + setting.slice(1).split(' ').join('')
-                      ))}>
+                    <button
+                      onClick={() =>
+                        dispatch(
+                          openBoardModel(
+                            setting.charAt(0).toLowerCase() + setting.slice(1).split(' ').join(''),
+                          ),
+                        )
+                      }
+                    >
                       {setting}
                     </button>
                   </li>

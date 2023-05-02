@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import { boardFormInfo } from '@/app/store/CONSTANT';
 import { useAppDispatch } from '@/app/store';
 import { Form, Formik, FormikHelpers } from 'formik';
-import { createNewBoard } from '@/app/store/boardSlice';
+import { createNewBoard, toggleActiveBoard } from '@/app/store/boardSlice';
 import { Button } from './Button';
 import { Board } from '../../app/types';
 import { InputControl } from './InputControl';
@@ -16,15 +16,72 @@ interface CreateNewBoardValue {
   [key: string]: string;
 }
 
-export function BoardForm({ defaultValues }: { defaultValues?: Board | undefined }) {
-  const [formInputs, setFormInputs] = useState(boardFormInfo);
+export function BoardForm({ defaultValues }: { defaultValues?: Board }) {
   const dispatch = useAppDispatch();
+  const [formInputs, setFormInputs] = useState(boardFormInfo);
 
-  const colsValues = formInputs
+  const colsKeys = formInputs
     .filter((input) => input.inputs?.map((inp) => inp.name))[0]
     .inputs?.map((i) => i.name);
 
-  const colsSchema = colsValues?.reduce((acc: any, curr) => {
+  const [initialValues] = useState<CreateNewBoardValue>(() => {
+    if (!defaultValues) {
+      return {
+        name: '',
+        ...colsKeys?.reduce((acc: any, curr) => {
+          acc[curr] = '';
+          return acc;
+        }, {}),
+      };
+    }
+    if (formInputs[1].inputs && defaultValues) {
+      const newFormInputs = formInputs.map((input) => {
+        if (input.inputs) {
+          const inputs = defaultValues.columns.map((col, idx) => {
+            const newInputValues = {
+              id: col.id,
+              name: `column-${col.id}`,
+              value: col.name,
+              placeholder: col.name,
+            };
+
+            if (input.inputs && input.inputs[idx] != null) {
+              return {
+                ...input.inputs[idx],
+                ...newInputValues,
+              };
+            }
+
+            return {
+              ...input.inputs[0],
+              ...newInputValues,
+            };
+          });
+          return { ...input, inputs };
+        }
+        return {
+          ...input,
+          name: 'name',
+          id: defaultValues.id,
+          value: defaultValues.name,
+          placeholder: defaultValues.name,
+        };
+      });
+
+      setFormInputs(newFormInputs);
+
+      return {
+        name: newFormInputs[0].value,
+        ...newFormInputs[1].inputs?.reduce((acc: any, curr) => {
+          acc[curr.name] = curr.value;
+          return acc;
+        }, {}),
+      };
+    }
+    return null;
+  });
+
+  const colsSchema = colsKeys?.reduce((acc: any, curr: any) => {
     acc[curr] = Yup.string().min(4, 'please enter at least 4');
     return acc;
   }, {});
@@ -33,84 +90,29 @@ export function BoardForm({ defaultValues }: { defaultValues?: Board | undefined
     name: Yup.string().min(4, 'please enter at least 4 characters').required("Can't be empty"),
     ...colsSchema,
   });
-  let initialColsValues;
-
-  if(defaultValues) {
-    console.log(formInputs);
-    const colsInputs = formInputs[1].inputs;
-    if(colsInputs && defaultValues.columns.length > colsInputs.length) {
-      defaultValues.columns.forEach((col, idx) => {        
-        if(colsInputs.length -1 < idx) {
-          const newInput = colsInputs[idx - 1];
-          // console.log(formInputs,  col.name , newInput);
-          formInputs[1].inputs = [ ...colsInputs, { 
-              ...newInput,
-              name:`column-${idx+1}`,
-              id:`${idx+1}`
-            }
-          ];
-          // console.log(formInputs,  col.name , newInput);
-          setFormInputs(formInputs)
-          // console.log(newInput, formInputs);
-          }
-      })
-    }
-
-    initialColsValues = defaultValues.columns.map(col => col.name).reduce((acc: any, curr) => {
-      acc[curr] = curr;
-      return acc
-    }, {})        
-  } else {
-    initialColsValues = colsValues?.reduce((acc: any, curr) => {
-      acc[curr] = '';
-      return acc;
-    }, {})
-  }
-
-  const initialValues = {
-        name: defaultValues?.name || '',
-        ...initialColsValues,
-  }
-
-
-  const onCreateBoard = async (
-    values: CreateNewBoardValue,
-    { setSubmitting }: FormikHelpers<CreateNewBoardValue>,
-  ) => {
-    const cols = Object.entries(values)
-      .filter(([key]) => key.startsWith('column-'))
-      .map(([, value]) => value && value.trim());
-
-    dispatch(
-      createNewBoard({
-        name: values.name,
-        columns: cols.map((colName) => {
-          return { name: colName, tasks: [] };
-        }),
-      }),
-    );
-    setSubmitting(false);
-  };
 
   const validateInput = (input: string, getFieldMeta: any) => {
     return !!getFieldMeta(input).touched && !getFieldMeta(input).error;
   };
 
-  function createNewColumn () {
+  const createNewColumn = () => {
+    console.dir('On Add: \n', { formInputs, defaultValues, initialValues });
     const newFormInputs = formInputs.map((input) => {
       if (input.inputs) {
         const inpLength = input.inputs.length;
-        let newInput;
-        if (inpLength === 0 && boardFormInfo[1].inputs) {
-          newInput = boardFormInfo[1].inputs['0'];
+        let newInnerInput;
+        if (inpLength === 0 && formInputs[1].inputs) {
+          newInnerInput = formInputs[1].inputs['0'];
         } else {
-          newInput = {
-            ...input.inputs[0],
-            name: `column-${inpLength + 1}`,
-            id: `${inpLength + 1}`,
+          newInnerInput = {
+            ...input.inputs[inpLength - 1],
+            name: `column-${Number(input.inputs[inpLength - 1].id) + 1}`,
+            id: `${Number(input.inputs[inpLength - 1].id) + 1}`,
+            value: '',
+            placeholder: '',
           };
         }
-        return { ...input, inputs: [...input.inputs, newInput] };
+        return { ...input, inputs: [...input.inputs, newInnerInput] };
       }
       return input;
     });
@@ -119,26 +121,81 @@ export function BoardForm({ defaultValues }: { defaultValues?: Board | undefined
   };
 
   const removeColumn = (id: string) => {
-    console.log(id);
+    console.log('On Revmoe: \n');
     const newFormInputs = formInputs.map((input) => {
       if (input.inputs) {
-        const newInputs = input.inputs.filter((inp) => inp.id !== id);
-        return { ...input, inputs: newInputs };
+        const inputs = input.inputs.filter((inp) => inp.id !== id);
+        inputs.map((innerInput, idx) => {
+          innerInput = {
+            ...innerInput,
+            value: innerInput.value,
+          };
+          console.log(innerInput, idx);
+          return innerInput;
+        });
+
+        return { ...input, inputs };
       }
       return input;
     });
 
     setFormInputs(newFormInputs);
+    console.dir({ id, formInputs, defaultValues, initialValues });
   };
+
+  const onCreateBoard = async (
+    values: CreateNewBoardValue,
+    { setSubmitting, setValues }: FormikHelpers<CreateNewBoardValue>,
+  ) => {
+    console.log('On Create: \n');
+    console.dir({ values, formInputs, defaultValues, initialValues });
+
+    const filteredValues = Object.fromEntries(
+      Object.entries(values).filter(
+        ([key]) => formInputs[1].inputs && formInputs[1].inputs.some((input) => input.name === key),
+      ),
+    );
+
+    setValues({
+      name: values.name,
+      ...filteredValues,
+    });
+
+    const colsNames: string[] = Object.values(filteredValues);
+    const existCols = defaultValues?.columns.filter((col) => {
+      return formInputs[1].inputs?.map((i) => i.id).includes(col.id);
+    });
+
+    dispatch(
+      createNewBoard({
+        id: `${defaultValues?.id}`,
+        name: values.name,
+        columns: colsNames.map((name, idx) => {
+          return {
+            id: `${idx + 1}`,
+            name,
+            tasks: (existCols && existCols[idx]?.tasks) || [],
+          };
+        }),
+      }),
+    );
+
+    dispatch(toggleActiveBoard(values.name));
+
+    console.dir({ colsNames, filteredValues, values, formInputs, defaultValues });
+    setSubmitting(false);
+  };
+
+  console.dir({ colsKeys, colsSchema, formInputs, defaultValues, initialValues });
 
   return (
     <Formik
-      onSubmit={onCreateBoard}
-      validationSchema={BoardFormSChema}
       initialValues={initialValues}
+      validationSchema={BoardFormSChema}
+      onSubmit={onCreateBoard}
     >
-      {({ isSubmitting, getFieldMeta }) => (
-        <Form className="flex flex-col gap-6">
+      {({ isSubmitting, getFieldMeta, values, handleSubmit, handleChange, handleBlur }) => (
+        <Form className="flex flex-col gap-6" onSubmit={handleSubmit}>
           {formInputs.map((input) => {
             return (
               <InputControl key={input.label}>
@@ -149,8 +206,6 @@ export function BoardForm({ defaultValues }: { defaultValues?: Board | undefined
                 {!input.inputs ? (
                   <div className="relative">
                     <InputField
-                      {...input}
-                      value={defaultValues?.name || undefined}
                       className={`${
                         validateInput(input.name, getFieldMeta)
                           ? 'border-primary-base'
@@ -158,32 +213,38 @@ export function BoardForm({ defaultValues }: { defaultValues?: Board | undefined
                             getFieldMeta(input.name).error &&
                             'border-danger'
                       }`}
+                      {...input}
+                      value={values.name}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                     />
                     <ErrorMessageWrapper input={input.name} />
                   </div>
                 ) : (
-                  input.inputs.map((inp, idx) => (
+                  input.inputs.map((innerInput) => (
                     <div
-                      key={inp.name}
+                      key={innerInput.name}
                       className="relative flex h-full w-full items-center justify-center gap-4"
                     >
                       <InputField
-                        {...inp}
-                        value={defaultValues?.columns[idx].name ?? undefined}
                         className={`${
-                          validateInput(inp.name, getFieldMeta)
+                          validateInput(innerInput.name, getFieldMeta)
                             ? 'border-primary-base'
-                            : getFieldMeta(inp.name).touched &&
-                              getFieldMeta(inp.name).error &&
+                            : getFieldMeta(innerInput.name).touched &&
+                              getFieldMeta(innerInput.name).error &&
                               'border-danger'
                         }`}
+                        {...innerInput}
+                        value={values[innerInput.name] || undefined}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
                       />
-                      <ErrorMessageWrapper input={inp.name} hasIcon />
+                      <ErrorMessageWrapper input={innerInput.name} hasIcon />
 
                       <button
                         type="button"
                         className="w-fit cursor-pointer"
-                        onClick={() => removeColumn(inp.id)}
+                        onClick={() => removeColumn(innerInput.id)}
                       >
                         <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg">
                           <g fill="#828FA3" className="hover:fill-danger" fill-rule="evenodd">

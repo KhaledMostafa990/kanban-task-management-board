@@ -1,9 +1,10 @@
 import { DeleteView } from './DeleteView';
 
-export function DeleteBoard({ board }: { board: any; columns: any[] }) {
+export function DeleteBoard({ board }: { board: any }) {
+  if (!board) return null;
   return (
     <>
-      <DeleteView type={'board'} title={board.name} />
+      <DeleteView type={'board'} board={board} title={board.name} />
     </>
   );
 }

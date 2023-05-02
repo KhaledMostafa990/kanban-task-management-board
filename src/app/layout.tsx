@@ -16,17 +16,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={`${plusJakartaSans.variable} scroll-smooth font-primary`}>
         <ReduxProvider>
-          <div className="h-screen min-h-screen overflow-hidden dark-theme">
+          <div className="dark-theme h-screen min-h-screen overflow-hidden">
             <Header />
 
             <div className="relative flex min-h-full w-full transition-all">
               <Sidebar />
               <main className="w-full bg-background-secondary py-12">{children}</main>
             </div>
-            
-          <Model />
-          </div>
 
+            <Model />
+          </div>
         </ReduxProvider>
       </body>
     </html>
