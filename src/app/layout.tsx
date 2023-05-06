@@ -3,7 +3,7 @@ import { Plus_Jakarta_Sans } from 'next/font/google';
 
 import Header from '@/features/Header';
 import Sidebar from '@/features/Sidebar';
-import Model from '@/components/layout/Model';
+import Model from '@/components/layout/Modal';
 import ReduxProvider from './store/ReduxProvider';
 
 const plusJakartaSans = Plus_Jakarta_Sans({

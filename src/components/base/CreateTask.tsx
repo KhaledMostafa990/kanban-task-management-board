@@ -1,10 +1,11 @@
+import { Column } from '.';
 import { TaskForm } from './TaskForm';
 
-export function CreateTask() {
+export function CreateTask({columns , boardName} : {columns: Column[], boardName: string}) {
   return (
     <>
       <h2 className="text-lg font-bold text-text-base">Add New Task</h2>
-      <TaskForm />
+      <TaskForm columns={columns} boardName={boardName} />
     </>
   );
 }

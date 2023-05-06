@@ -1,10 +1,10 @@
 import { DeleteView } from './DeleteView';
-import { Task } from '../../app/types';
+import { Column, Task } from '@/app/types';
 
-export function DeleteTask({ task }: { task: Task; columns: any[] }) {
+export function DeleteTask({ task }: { task: Task | null; columns: Column[] }) {
   return (
     <>
-      <DeleteView type={'task'} title={task.title} />
+      <DeleteView type={'task'} data={task} title={task?.title} />
     </>
   );
 }

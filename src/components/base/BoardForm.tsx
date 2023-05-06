@@ -6,7 +6,7 @@ import { useAppDispatch } from '@/app/store';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { createNewBoard, toggleActiveBoard } from '@/app/store/boardSlice';
 import { Button } from './Button';
-import { Board } from '../../app/types';
+import { Board } from '@/app/types';
 import { InputControl } from './InputControl';
 import { InputField } from './InputField';
 import { ErrorMessageWrapper } from './ErrorMessageWrapper';
@@ -82,12 +82,12 @@ export function BoardForm({ defaultValues }: { defaultValues?: Board }) {
   });
 
   const colsSchema = colsKeys?.reduce((acc: any, curr: any) => {
-    acc[curr] = Yup.string().min(4, 'please enter at least 4');
+    acc[curr] = Yup.string().min(3, 'please enter at least 3');
     return acc;
   }, {});
 
   const BoardFormSChema = Yup.object().shape({
-    name: Yup.string().min(4, 'please enter at least 4 characters').required("Can't be empty"),
+    name: Yup.string().min(3, 'please enter at least 3 characters').required("Can't be empty"),
     ...colsSchema,
   });
 
@@ -95,8 +95,7 @@ export function BoardForm({ defaultValues }: { defaultValues?: Board }) {
     return !!getFieldMeta(input).touched && !getFieldMeta(input).error;
   };
 
-  const createNewColumn = () => {
-    console.dir('On Add: \n', { formInputs, defaultValues, initialValues });
+  const createNewColumn = () => {   
     const newFormInputs = formInputs.map((input) => {
       if (input.inputs) {
         const inpLength = input.inputs.length;
@@ -120,8 +119,7 @@ export function BoardForm({ defaultValues }: { defaultValues?: Board }) {
     setFormInputs(newFormInputs);
   };
 
-  const removeColumn = (id: string) => {
-    console.log('On Revmoe: \n');
+  const removeColumn = (id: string) => {   
     const newFormInputs = formInputs.map((input) => {
       if (input.inputs) {
         const inputs = input.inputs.filter((inp) => inp.id !== id);
@@ -129,8 +127,7 @@ export function BoardForm({ defaultValues }: { defaultValues?: Board }) {
           innerInput = {
             ...innerInput,
             value: innerInput.value,
-          };
-          console.log(innerInput, idx);
+          };         
           return innerInput;
         });
 
@@ -139,27 +136,19 @@ export function BoardForm({ defaultValues }: { defaultValues?: Board }) {
       return input;
     });
 
-    setFormInputs(newFormInputs);
-    console.dir({ id, formInputs, defaultValues, initialValues });
+    setFormInputs(newFormInputs);   
   };
 
-  const onCreateBoard = async (
+  const onCreateBoard = (
     values: CreateNewBoardValue,
-    { setSubmitting, setValues }: FormikHelpers<CreateNewBoardValue>,
-  ) => {
-    console.log('On Create: \n');
-    console.dir({ values, formInputs, defaultValues, initialValues });
+    { setSubmitting }: FormikHelpers<CreateNewBoardValue>,
+  ) => {      
 
     const filteredValues = Object.fromEntries(
       Object.entries(values).filter(
         ([key]) => formInputs[1].inputs && formInputs[1].inputs.some((input) => input.name === key),
       ),
-    );
-
-    setValues({
-      name: values.name,
-      ...filteredValues,
-    });
+    );    
 
     const colsNames: string[] = Object.values(filteredValues);
     const existCols = defaultValues?.columns.filter((col) => {
@@ -179,14 +168,10 @@ export function BoardForm({ defaultValues }: { defaultValues?: Board }) {
         }),
       }),
     );
-
-    dispatch(toggleActiveBoard(values.name));
-
-    console.dir({ colsNames, filteredValues, values, formInputs, defaultValues });
     setSubmitting(false);
   };
 
-  console.dir({ colsKeys, colsSchema, formInputs, defaultValues, initialValues });
+  // console.dir({ formInputs, defaultValues, initialValues });
 
   return (
     <Formik
@@ -194,8 +179,8 @@ export function BoardForm({ defaultValues }: { defaultValues?: Board }) {
       validationSchema={BoardFormSChema}
       onSubmit={onCreateBoard}
     >
-      {({ isSubmitting, getFieldMeta, values, handleSubmit, handleChange, handleBlur }) => (
-        <Form className="flex flex-col gap-6" onSubmit={handleSubmit}>
+      {({ isSubmitting, getFieldMeta, values, handleChange, handleBlur }) => (
+        <Form className="flex flex-col gap-6">
           {formInputs.map((input) => {
             return (
               <InputControl key={input.label}>

@@ -7,9 +7,17 @@ import { useAppSelector } from './store';
 
 export default function Home() {
   const activeBoard = useAppSelector((state) => state.boardSidebar.activeBoard);
-  console.log(activeBoard);
 
   return !activeBoard ? (
+    <div className="flex h-full w-full flex-col items-center justify-center gap-6">
+      <h2 className="text-center text-lg font-bold text-text-muted">
+        There is no board here yet. Create a new board to get started.
+      </h2>
+      <Button type="primary" withIcon>
+        Add New Board
+      </Button>
+    </div>
+  ) : activeBoard.columns.length === 0 ? (
     <div className="flex h-full w-full flex-col items-center justify-center gap-6">
       <h2 className="text-center text-lg font-bold text-text-muted">
         This board is empty. Create a new column to get started.

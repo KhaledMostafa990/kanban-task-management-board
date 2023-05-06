@@ -31,36 +31,39 @@ export const boardFormInfo = [
   },
 ];
 
-export const TaskFormInfo = [
+export const taskFormInfo = [
   {
-    label: 'Name',
+    label: 'Title',
+    id: 'task-name',
+    name: 'title',
     type: 'text',
-    name: 'name',
+    value: '',
     placeholder: 'e.g. Web Design',
     required: true,
   },
   {
-    label: 'Desciption',
+    label: 'Description',
+    id: 'task-description',
     type: 'textarea',
-    name: 'desciption',
+    name: 'description',
+    value: '',
     placeholder: 'How can I help you?',
-    required: true,
   },
   {
     label: 'Subtasks',
     inputs: [
       {
         type: 'text',
-        name: 'column',
         id: '1',
+        name: 'column-1',
+        value: '',
         placeholder: 'Todo',
         required: true,
-        value: '',
       },
       {
         type: 'text',
-        name: 'column',
         id: '2',
+        name: 'column-2',
         placeholder: 'Doing',
         required: true,
         value: '',
@@ -69,14 +72,10 @@ export const TaskFormInfo = [
   },
   {
     label: 'Status',
+    id: 'task-status',
     type: 'select',
     name: 'status',
     value: 'Todo',
     required: true,
-    options: [
-      {
-        value: 'Todo',
-      },
-    ],
   },
 ];

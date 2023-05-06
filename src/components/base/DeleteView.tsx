@@ -1,29 +1,32 @@
 import { useAppDispatch, useAppSelector } from '@/app/store';
-import { deleteBoard, toggleActiveBoard, toggleModelView } from '@/app/store/boardSlice';
-import { Board } from '@/app/types';
+import { deleteBoardOrTask, toggleActiveBoard, toggleModelView } from '@/app/store/boardSlice';
+import { Board, Task } from '@/app/types';
 import { Button } from './Button';
 
-export function DeleteView({ type, title, board }: { type: string; title: string; board: Board }) {
+export function DeleteView({
+  type,
+  title,
+  data,
+}: {
+  type: string;
+  title: string | undefined;
+  data: Board | Task | null;
+}) {
   const dispatch = useAppDispatch();
-  const boards = useAppSelector((state) => state.boardSidebar.boards);
+  
+  const onDeleteBoardOrdeleteBoardOrTask = () => {
+    let statusName = '';
 
-  const onDeleteBoard = () => {
-    // get previous and next board index to set the new active board
-    const boardIndex = boards.findIndex((b) => b.id === board.id);
-    const prvBoard = boardIndex - 1;
-    const nextBoard = boardIndex + 1;
-
-    console.log(boards, boardIndex, boards[nextBoard]);
-
-    if (boards[nextBoard] != null) {
-      dispatch(toggleActiveBoard(boards[nextBoard].name));
-    } else if (boards[prvBoard] != null) {
-      dispatch(toggleActiveBoard(boards[prvBoard].name));
-    } else {
-      dispatch(toggleActiveBoard(''));
+    if (data && 'status' in data) {
+       statusName = data.status;
     }
+    
+    dispatch(deleteBoardOrTask({
+      type: type,
+      id: data != null ? data.id : '',
+      taskStatus: statusName,
+    }));
 
-    dispatch(deleteBoard(`${board.id}`));
     dispatch(toggleModelView());
   };
 
@@ -37,7 +40,7 @@ export function DeleteView({ type, title, board }: { type: string; title: string
       </p>
 
       <div className="flex flex-col gap-3">
-        <Button type="danger" onClick={onDeleteBoard}>
+        <Button type="danger" onClick={onDeleteBoardOrdeleteBoardOrTask}>
           Delete
         </Button>
         <Button type="secondary" onClick={() => dispatch(toggleModelView())}>
