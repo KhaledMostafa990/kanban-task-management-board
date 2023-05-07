@@ -23,7 +23,7 @@ function AvaliableBoardView({activeBoard, dispatch} : { activeBoard: Board, disp
   return (
     <section className="h-full w-full">
       <div className="container h-full min-h-max lg:w-full 2xl:w-[1111px]">
-        <Row className="h-[calc(100vh-141px)] overflow-scroll">
+        <Row className="h-[calc(100vh-141px)] overflow-scroll ">
           <div className="flex h-full gap-6">
             {activeBoard.columns.map((column: any) => (
               <BoardColumn key={column.id} column={column} />

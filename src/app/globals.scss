@@ -60,13 +60,7 @@
     --color-btn-secondary: var(--color-white);
     --color-btn-secondary-hover: var(--color-white);    
   }
-
-  // @media (prefers-color-scheme: dark) {
-  //   :root {
-  //     @extend .dark-color-theme;
-  //   }
-  // }
-
+  
   .dark-theme {
     @extend .dark-color-theme;
   }
@@ -75,3 +69,32 @@
 .container {
   @apply grid grid-cols-12 max-w-[100vw] lg:max-w-full 2xl:w-[1111px] mx-auto;  
 }
+
+/* Set the width of the scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;  
+}
+
+/* Style the scrollbar track */
+::-webkit-scrollbar-track {
+  background-color: transparent; /* Set a background color */  
+  opacity: 0;
+}
+
+/* Style the scrollbar thumb */
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-text-muted); /* Set a background color */
+  border-radius: 12px; /* Set rounded corners */  
+}
+
+/* Hide the scrollbar when it's not being used */
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-background-primary);
+}
+
+// Hide the corner of the scrollbar
+::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+

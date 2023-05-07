@@ -3,18 +3,20 @@
 import { useAppSelector, useAppDispatch } from '@/app/store/store';
 import {
   openBoardModal,
-  toggleActiveBoard,
+  toggleActiveBoard,  
   toggleSidebar,
   toggleTheme,
 } from '@/app/store/boardSlice';
 
-import { BoardListItem } from '@/components/base';
+import { BoardListItem, Overlay } from '@/components/base';
+import { useEscapeListener } from '@/hooks/useEscapeListener';
 
 export default function Sidebar() {
   const dispatch = useAppDispatch();
   const boards = useAppSelector((state) => state.boardSidebar.boards);
   const activeBoard = useAppSelector((state) => state.boardSidebar.activeBoard);
   const isSidebarOpen = useAppSelector((state) => state.boardSidebar.sidebarActive);
+  const isModelOpen = useAppSelector((state) => state.boardSidebar.models.open);
 
   const sidebarState = isSidebarOpen && 'active';
   const activeTheme = useAppSelector((state) => state.boardSidebar.theme);
@@ -27,7 +29,16 @@ export default function Sidebar() {
     }
   }
 
+  useEscapeListener({
+    isModelOpen: isSidebarOpen && !isModelOpen ? isSidebarOpen : false,
+    toggleFunction: () => dispatch(toggleSidebar())
+  });
+
   return (
+    <>
+
+    {isSidebarOpen && <Overlay className='z-20 lg:hidden' onClick={() => dispatch(toggleSidebar())} /> }
+    
     <aside
       id="sidebar"
       className={`${sidebarState} absolute left-0 top-[10%] z-40 flex h-fit w-[65%] max-w-[450px]
@@ -35,6 +46,7 @@ export default function Sidebar() {
       transition-transform md:top-0 md:h-[calc(100vh-93px)] md:min-w-[260px] md:max-w-[260px] md:justify-between md:rounded-none
       [&.active]:left-[50%] [&.active]:translate-x-[-50%] md:[&.active]:relative md:[&.active]:left-0 md:[&.active]:translate-x-0`}
     >
+
       <div className="flex flex-col gap-6">
         <p className="pl-6 text-body-xs text-text-muted">All Boards {`(${boards.length})`}</p>
 
@@ -134,5 +146,6 @@ export default function Sidebar() {
         </div>
       </div>
     </aside>
+    </>
   );
 }
