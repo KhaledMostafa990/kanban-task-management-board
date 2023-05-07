@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import React, { useState } from 'react';
 import { taskFormInfo } from '@/app/store/CONSTANT';
 import { Form, Formik, FormikHelpers } from 'formik';
-import { useAppDispatch, useAppSelector } from '@/app/store';
+import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { ErrorMessageWrapper } from './ErrorMessageWrapper';
 import { Button } from './Button';
 import { InputControl } from './InputControl';
@@ -120,8 +120,8 @@ export function TaskForm(
       if (input.inputs) {
         const inpLength = input.inputs.length;
         let newInnerInput;
-        if (inpLength === 0 && formInputs[1].inputs) {
-          newInnerInput = formInputs[1].inputs['0'];
+        if (inpLength === 0 && taskFormInfo[2].inputs) {
+          newInnerInput = taskFormInfo[2].inputs['0'];
         } else {
           newInnerInput = {
             ...input.inputs[inpLength - 1],
