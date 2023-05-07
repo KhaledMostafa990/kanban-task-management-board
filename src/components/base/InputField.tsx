@@ -7,6 +7,9 @@ export function InputField({
   placeholder,
   value,
   className,
+  onChange,
+  onBlur,
+  children,
 }: {
   type: string;
   id?: string;
@@ -14,6 +17,9 @@ export function InputField({
   placeholder: string;
   value: string | null | undefined;
   className?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  children?: React.ReactNode;
 }) {
   return (
     <Field
@@ -21,11 +27,17 @@ export function InputField({
       outline-none placeholder:text-body-sm placeholder:text-text-base placeholder:opacity-25
       hover:border-primary-25 focus:border-primary-75 active:bg-transparent
       ${className}`}
-      type={type}
+      type={type}      
+      cols={type === 'textarea' ? 15 : undefined}
+      rows={type === 'textarea' ? 4 : undefined}
+      as={type === 'textarea' ? 'textarea' : type === 'select' ? 'select' : 'input'}
       id={id}
       name={name}
       placeholder={placeholder}
       value={value}
+      onChange={onChange}
+      onBlur={onBlur}
+      children={children}
     />
   );
 }
