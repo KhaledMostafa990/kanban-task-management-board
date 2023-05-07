@@ -19,10 +19,20 @@ export function Button({
 }) {
   const disabled = isDisabled && 'opacity-25';
   const textColor = type === 'secondary' ? 'text-primary-base' : 'text-white';
-  const HovereColor = type === 'primary' ? 'hover:bg-btn-primary-hover' :  type === 'secondary' ? 'hover:bg-btn-secondary-hover' : 'hover:bg-btn-danger-hover' ;
+  const HovereColor =
+    // eslint-disable-next-line no-nested-ternary
+    type === 'primary'
+      ? 'hover:bg-btn-primary-hover'
+      : type === 'secondary'
+      ? 'hover:bg-btn-secondary-hover'
+      : 'hover:bg-btn-danger-hover';
   const bgColor =
     // eslint-disable-next-line no-nested-ternary
-    type === 'primary' ? 'bg-btn-primary' : type === 'secondary' ? 'bg-btn-secondary' : 'bg-btn-danger';
+    type === 'primary'
+      ? 'bg-btn-primary'
+      : type === 'secondary'
+      ? 'bg-btn-secondary'
+      : 'bg-btn-danger';
 
   return (
     <>

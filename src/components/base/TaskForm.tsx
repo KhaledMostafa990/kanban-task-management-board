@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button } from './Button';
-import { Task } from './types';
+import { Task } from '../../app/types';
 
 export function TaskForm({ defaultValues }: { defaultValues?: Task }) {
   const [subtasks] = useState(

@@ -1,17 +1,26 @@
 'use client';
 
+import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '@/app/store';
+
+import { openBoardModel, toggleSidebar } from '@/app/store/boardSlice';
 import { Button, Logo } from '@/components/base';
 import { Row } from '@/components/layout';
 
-interface HeroProps extends React.HTMLAttributes<HTMLElement> {}
-
-export default function Header(props: HeroProps) {
+export default function Header() {
+  const dispatch = useAppDispatch();
+  const activeBoard = useAppSelector((state) => state.boardSidebar.activeBoard);
+  const currentBoardName = activeBoard.name;
   const boardSettings = ['Edit Board', 'Delete Board'];
-  const currentBoardName = null;
+  const [boardSettingOpen, setBoardSettingOpen] = useState<boolean>(false);
+  // const boardSettingListRef = useRef<HTMLELement | null>(null);
+
+  const showBoardSetting = () => {
+    setBoardSettingOpen(!boardSettingOpen);
+  };
 
   return (
     <header
-      {...props}
       className={`z-30 flex w-full border-b border-border-base bg-background-primary shadow-sm`}
     >
       <div className="hidden min-w-[260px] justify-center border-r border-border-base md:flex">
@@ -29,8 +38,14 @@ export default function Header(props: HeroProps) {
               {currentBoardName ?? 'No Board Available Yet'}
             </span>
 
-            {!currentBoardName && (
-              <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg">
+            {currentBoardName && (
+              <svg
+                onClick={() => dispatch(toggleSidebar())}
+                className="cursor-pointer md:hidden"
+                width="10"
+                height="7"
+                xmlns="http://www.w3.org/2000/svg"
+              >
                 <path stroke="#635FC7" stroke-width="2" fill="none" d="m1 1 4 4 4-4" />
               </svg>
             )}
@@ -45,26 +60,36 @@ export default function Header(props: HeroProps) {
             <div className="relative">
               {/* Board settings */}
               <ul
-                className={`absolute top-[calc(100%+2rem)] right-0 flex w-[200px] translate-x-[200%] flex-col gap-4 bg-background-primary p-3 transition-transform [&.active]:translate-x-0`}
+                // ref={boardSettingListRef}
+                className={`${
+                  boardSettingOpen && 'active'
+                } absolute top-[calc(100%+2rem)] right-0 z-50 flex w-[200px] translate-x-[200%]
+                flex-col gap-4 bg-background-primary p-3 transition-transform [&.active]:translate-x-0`}
               >
                 {boardSettings?.map((setting, index) => (
                   <li
                     key={setting}
                     className={`${index % 2 === 0 ? 'text-text-muted' : 'text-secondary-base'}`}
                   >
-                    {setting}
+                    <button onClick={() => dispatch(openBoardModel(
+                        setting.charAt(0).toLowerCase() + setting.slice(1).split(' ').join('')
+                      ))}>
+                      {setting}
+                    </button>
                   </li>
                 ))}
               </ul>
 
               {/* settings icon */}
-              <svg width="5" height="20" xmlns="http://www.w3.org/2000/svg">
-                <g fill="#828FA3" fillRule="evenodd">
-                  <circle cx="2.308" cy="2.308" r="2.308" />
-                  <circle cx="2.308" cy="10" r="2.308" />
-                  <circle cx="2.308" cy="17.692" r="2.308" />
-                </g>
-              </svg>
+              <button onClick={showBoardSetting}>
+                <svg width="5" height="20" xmlns="http://www.w3.org/2000/svg">
+                  <g fill="#828FA3" fillRule="evenodd">
+                    <circle cx="2.308" cy="2.308" r="2.308" />
+                    <circle cx="2.308" cy="10" r="2.308" />
+                    <circle cx="2.308" cy="17.692" r="2.308" />
+                  </g>
+                </svg>
+              </button>
             </div>
           </div>
         </Row>

@@ -1,9 +1,10 @@
 import { HTMLProps } from 'react';
 
 export function BoardListItem(props: HTMLProps<HTMLButtonElement>) {
-  const { className, children } = props ?? {};
+  const { className, children, onClick } = props ?? {};
   return (
-    <button
+    <button      
+      onClick={onClick}
       className={` ${
         className ?? ''
       } flex w-[85%] items-center gap-2.5 rounded-tr-3xl rounded-br-3xl bg-transparent py-2.5 pl-6 text-base
