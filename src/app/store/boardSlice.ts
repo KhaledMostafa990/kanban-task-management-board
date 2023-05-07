@@ -67,7 +67,7 @@ const boardSidebar = createSlice({
       state.models.open = !state.models.open;
     },
 
-    openBoardModel(state, actions: PayloadAction<string>) {
+    openBoardModal(state, actions: PayloadAction<string>) {
       state.models.modelView = actions.payload;
       state.models.open = true;
 
@@ -286,7 +286,7 @@ export const {
   toggleSidebar,
   toggleActiveBoard,
   toggleTheme,
-  openBoardModel,
+  openBoardModal,
   createNewBoard,
   deleteBoardOrTask,
   setActiveTask,

@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import boardSidebar, { SidebarState } from "./boardSlice";
+import boardSidebar, { BoardSidebarState } from "./boardSlice";
 import { useDispatch, useSelector } from 'react-redux'
 import type { TypedUseSelectorHook } from 'react-redux'
 
 export interface StoreState {
-  sidebar: SidebarState
+  sidebar: BoardSidebarState
 }
 
 const store = configureStore({
@@ -12,10 +12,6 @@ const store = configureStore({
     boardSidebar
   }
 });
-
-
-
-
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>

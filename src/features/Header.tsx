@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '@/app/store';
+import { useAppDispatch, useAppSelector } from '@/app/store/store';
 
-import { openBoardModel, toggleSidebar } from '@/app/store/boardSlice';
+import { openBoardModal, toggleSidebar } from '@/app/store/boardSlice';
 import { Button, Logo } from '@/components/base';
 import { Row } from '@/components/layout';
 import { SettingModal } from './SettingModal';
@@ -15,7 +15,7 @@ export default function Header() {
 
   const boardSettings = ['Edit Board', 'Delete Board'];
 
-  const showBoardSetting = () => {
+  const showBoardSettings = () => {
     setBoardSettingOpen(!boardSettingOpen);
   };
 
@@ -53,7 +53,7 @@ export default function Header() {
 
           <div className="flex items-center justify-center gap-4">
             {/* Add Task Button */}
-            <Button type="primary" withIcon onClick={() => dispatch(openBoardModel('createTask'))}>
+            <Button type="primary" withIcon onClick={() => dispatch(openBoardModal('createTask'))}>
               Add New Task
             </Button>
 
@@ -62,7 +62,7 @@ export default function Header() {
               <SettingModal
                 isOpen={boardSettingOpen}
                 settingList={boardSettings}
-                onOpenSettings={showBoardSetting}                
+                onOpenSettings={showBoardSettings}                
               />
             </div>
           </div>

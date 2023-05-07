@@ -1,10 +1,11 @@
 'use client';
 
-import { useAppDispatch, useAppSelector } from '@/app/store';
-import { openBoardModel, setActiveTask } from '@/app/store/boardSlice';
+import { useAppDispatch, useAppSelector } from '@/app/store/store';
+import { openBoardModal } from '@/app/store/boardSlice';
+import { useEscapeListener } from '@/hooks/useEscapeListener';
 
 export function SettingModal({
-  isOpen: boardSettingOpen,
+  isOpen,
   settingList,
   dataId,
   columnId,
@@ -17,33 +18,14 @@ export function SettingModal({
   onOpenSettings: () => void;
 }) {
   const dispatch = useAppDispatch();
-  const activeTask = useAppSelector((state) => state.boardSidebar.activeTask);
-
   const onOpenSetting = (settingName: string) => {
     dispatch(
-      openBoardModel(
-        settingName.charAt(0).toLowerCase() + settingName.slice(1).split(' ').join(''),
-      ),
+      openBoardModal(settingName.charAt(0).toLowerCase() + settingName.slice(1).split(' ').join('')),
     );
   };
+  useEscapeListener({isModelOpen: isOpen, toggleFunction: onOpenSettings});
   return (
     <>
-      <ul
-        className={`${
-          boardSettingOpen && 'active'
-        } absolute top-[calc(100%+2rem)] right-0 z-50 flex w-[200px] translate-x-[150%]
-            flex-col gap-4 bg-background-primary p-3 opacity-0 transition-transform [&.active]:translate-x-0 [&.active]:opacity-100`}
-      >
-        {settingList?.map((setting, index) => (
-          <li
-            key={setting}
-            className={`${index % 2 === 0 ? 'text-text-muted' : 'text-secondary-base'}`}
-          >
-            <button onClick={() => onOpenSetting(setting)}>{setting}</button>
-          </li>
-        ))}
-      </ul>
-
       {/* settings icon */}
       <button onClick={onOpenSettings}>
         <svg width="5" height="20" xmlns="http://www.w3.org/2000/svg">
@@ -54,6 +36,26 @@ export function SettingModal({
           </g>
         </svg>
       </button>
+
+      {/* settings list */}
+      <ul
+        className={`${isOpen && 'active'}
+          absolute top-[calc(100%+2rem)] right-0 z-50 flex w-[200px] translate-x-[150%]
+          flex-col gap-4 bg-background-primary p-3 opacity-0
+          transition-transform [&.active]:translate-x-0 [&.active]:opacity-100`
+        }
+      >
+        {settingList?.map((setting, index) => (
+          <li
+            key={setting}
+            className={`${index % 2 === 0 ? 'text-text-muted' : 'text-secondary-base'}`}
+          >
+            <button 
+              tabIndex={isOpen ? 0 : -1}
+              onClick={() => onOpenSetting(setting)}>{setting}</button>
+          </li>
+        ))}
+      </ul>
     </>
   );
 }

@@ -1,8 +1,8 @@
 'use client';
 
-import { useAppSelector, useAppDispatch } from '@/app/store';
+import { useAppSelector, useAppDispatch } from '@/app/store/store';
 import {
-  openBoardModel,
+  openBoardModal,
   toggleActiveBoard,
   toggleSidebar,
   toggleTheme,
@@ -45,6 +45,7 @@ export default function Sidebar() {
               <BoardListItem
                 onClick={() => dispatch(toggleActiveBoard(board.name))}
                 className={`${board.name === activeBoard.name && 'active'}`}
+                tabIndex={isSidebarOpen ? 0 : -1}
               >
                 {board.name}
               </BoardListItem>
@@ -52,7 +53,10 @@ export default function Sidebar() {
           ))}
 
           <li>
-            <BoardListItem onClick={() => dispatch(openBoardModel('createBoard'))}>
+            <BoardListItem 
+              tabIndex={isSidebarOpen ? 0 : -1}
+              onClick={() => dispatch(openBoardModal('createBoard'))}
+            >
               Create New Board
             </BoardListItem>
           </li>
@@ -70,22 +74,24 @@ export default function Sidebar() {
               />
             </svg>
 
-            <button className="pointer-events-auto h-fit w-fit rounded-full bg-primary-base p-1 xl:p-1.5">
+            <div 
+              className="pointer-events-auto h-fit w-fit rounded-full bg-primary-base p-1 xl:p-1.5">
               <input
+                tabIndex={isSidebarOpen ? 0 : -1}
                 id="toggle-checkbox"
                 type="checkbox"
                 value={activeTheme}
-                onClick={toggleActiveTheme}
+                onChange={toggleActiveTheme}
                 checked={activeTheme === 'dark'}
                 className="relative block h-6 min-h-full w-12 min-w-full cursor-pointer appearance-none rounded-full bg-primary-base
-              before:absolute before:h-full before:w-1/2 before:rounded-full before:bg-white before:shadow-md
-              before:shadow-neutral-500 before:transition-transform before:duration-500 checked:before:translate-x-full"
+                before:absolute before:h-full before:w-1/2 before:rounded-full before:bg-white before:shadow-md
+                before:shadow-neutral-500 before:transition-transform before:duration-500 checked:before:translate-x-full"
               />
 
               <label htmlFor="toggle-checlbox" className="sr-only">
                 toggle pricing card from monthly to annual
               </label>
-            </button>
+            </div>
 
             <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -99,6 +105,7 @@ export default function Sidebar() {
         {/* Toggle Sidebar on tablet & desktop */}
         <div className="hidden items-center justify-center pr-6 md:flex">
           <button
+            // tabIndex={isSidebarOpen ? 0 : -1}
             onClick={() => dispatch(toggleSidebar())}
             className={`${sidebarState} relative left-[72%] flex items-center justify-center gap-4 rounded-tr-full rounded-br-full
             bg-primary-base px-5 py-3 text-text-muted transition-all hover:bg-btn-primary-hover [&.active]:static

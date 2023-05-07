@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from '@/app/store';
+import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { deleteBoardOrTask, toggleActiveBoard, toggleModelView } from '@/app/store/boardSlice';
 import { Board, Task } from '@/app/types';
 import { Button } from './Button';

@@ -1,4 +1,4 @@
-import { useAppDispatch } from '@/app/store';
+import { useAppDispatch } from '@/app/store/store';
 import { toggleSubTaskStatus, toggleTaskStatus } from '@/app/store/boardSlice';
 import { Column, Task } from '@/app/types';
 import { SettingModal } from '@/features/SettingModal';
@@ -52,12 +52,13 @@ export function ViewTask({ task, columns }: { task: Task | null; columns: Column
 
       <div className="flex flex-col items-start gap-2.5">
         {task?.subtasks.map((subTask) => (
-          <button
+          <div
             key={subTask.title}
-            className="inline-block flex gap-2 bg-background-secondary px-2 py-2.5 hover:bg-primary-25 "
-            onClick={(e) => handleSubTaskStatus(subTask.id)}
+            className="inline-block flex gap-2 bg-background-secondary px-2 py-2.5 hover:bg-primary-25"            
           >
-              <input type="checkbox" id={`subtask-${subTask.id}`} name={`subtask-${subTask.id}`} checked={subTask.isCompleted} />
+              <input
+                onChange={(e) => handleSubTaskStatus(subTask.id)}
+                type="checkbox" id={`subtask-${subTask.id}`} name={`subtask-${subTask.id}`} checked={subTask.isCompleted} />
 
               <label
                 htmlFor={`subtask-${subTask.id}`}
@@ -66,7 +67,7 @@ export function ViewTask({ task, columns }: { task: Task | null; columns: Column
               >
                 {subTask.title}
               </label>
-          </button>
+          </div>
         ))}
       </div>
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as Yup from 'yup';
 
 import { boardFormInfo } from '@/app/store/CONSTANT';
-import { useAppDispatch } from '@/app/store';
+import { useAppDispatch } from '@/app/store/store';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { createNewBoard, toggleActiveBoard } from '@/app/store/boardSlice';
 import { Button } from './Button';
@@ -82,7 +82,7 @@ export function BoardForm({ defaultValues }: { defaultValues?: Board }) {
   });
 
   const colsSchema = colsKeys?.reduce((acc: any, curr: any) => {
-    acc[curr] = Yup.string().min(3, 'please enter at least 3');
+    acc[curr] = Yup.string().min(3, 'please enter at least 3').required("Can't be empty");
     return acc;
   }, {});
 
@@ -100,8 +100,8 @@ export function BoardForm({ defaultValues }: { defaultValues?: Board }) {
       if (input.inputs) {
         const inpLength = input.inputs.length;
         let newInnerInput;
-        if (inpLength === 0 && formInputs[1].inputs) {
-          newInnerInput = formInputs[1].inputs['0'];
+        if (inpLength === 0 && boardFormInfo[1].inputs) {
+          newInnerInput = boardFormInfo[1].inputs['0'];
         } else {
           newInnerInput = {
             ...input.inputs[inpLength - 1],
@@ -171,7 +171,7 @@ export function BoardForm({ defaultValues }: { defaultValues?: Board }) {
     setSubmitting(false);
   };
 
-  // console.dir({ formInputs, defaultValues, initialValues });
+  console.dir({ formInputs, defaultValues, initialValues });
 
   return (
     <Formik

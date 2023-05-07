@@ -1,14 +1,15 @@
-import { HTMLProps } from 'react';
+import { ButtonHTMLAttributes, DetailedHTMLProps, DetailsHTMLAttributes, HTMLProps } from 'react';
 
-export function BoardListItem(props: HTMLProps<HTMLButtonElement>) {
+export function BoardListItem(props: DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> ) {
   const { className, children, onClick } = props ?? {};
   return (
     <button      
+      {...props}
       onClick={onClick}
       className={` ${
         className ?? ''
       } flex w-[85%] items-center gap-2.5 rounded-tr-3xl rounded-br-3xl bg-transparent py-2.5 pl-6 text-base
-       text-text-muted hover:bg-btn-secondary hover:text-primary-base [&.active]:bg-primary-base [&.active]:text-white`}
+      text-text-muted hover:bg-btn-secondary hover:text-primary-base [&.active]:bg-primary-base [&.active]:text-white`}
     >
       <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
         <path
