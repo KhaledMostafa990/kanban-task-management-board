@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { deleteBoardOrTask, toggleActiveBoard, toggleModelView } from '@/app/store/boardSlice';
 import { Board, Task } from '@/app/types';
-import { Button } from './Button';
+import { Button } from  '@/components/base';
 
 export function DeleteView({
   type,

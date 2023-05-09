@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, DetailedHTMLProps, DetailsHTMLAttributes, HTMLProps } from 'react';
+import { ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
 
 export function BoardListItem(props: DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> ) {
   const { className, children, onClick } = props ?? {};

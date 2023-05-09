@@ -1,15 +1,10 @@
 /* eslint-disable no-nested-ternary */
 import * as Yup from 'yup';
 import React, { useState } from 'react';
-import { taskFormInfo } from '@/app/store/CONSTANT';
 import { Form, Formik, FormikHelpers } from 'formik';
-import { useAppDispatch, useAppSelector } from '@/app/store/store';
-import { ErrorMessageWrapper } from './ErrorMessageWrapper';
-import { Button } from './Button';
-import { InputControl } from './InputControl';
+import { useAppDispatch, taskFormInfo, saveTask } from '@/app/store';
 import { Column, Task } from '@/app/types';
-import { InputField } from './InputField';
-import {  saveTask } from '@/app/store/boardSlice';
+import { Button, InputControl, InputField, ErrorMessageWrapper } from '@/components/base';
 
 interface CreateNewTaskValue {
   title: string;

@@ -1,5 +1,5 @@
 import { TaskForm } from './TaskForm';
-import { Task } from '../../app/types';
+import { Task } from '@/app/types';
 
 export function EditTask({ task, columns, boardName } : { task: Task | null; columns: any[], boardName: string }) {
   return (

@@ -4,12 +4,9 @@ import * as Yup from 'yup';
 import { boardFormInfo } from '@/app/store/CONSTANT';
 import { useAppDispatch } from '@/app/store/store';
 import { Form, Formik, FormikHelpers } from 'formik';
-import { createNewBoard, toggleActiveBoard } from '@/app/store/boardSlice';
-import { Button } from './Button';
+import { createNewBoard } from '@/app/store';
 import { Board } from '@/app/types';
-import { InputControl } from './InputControl';
-import { InputField } from './InputField';
-import { ErrorMessageWrapper } from './ErrorMessageWrapper';
+import { Button, InputControl, InputField, ErrorMessageWrapper } from '@/components/base';
 
 interface CreateNewBoardValue {
   name: string;

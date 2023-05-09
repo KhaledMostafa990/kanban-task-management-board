@@ -1,7 +1,6 @@
 'use client';
 
-import { useAppDispatch, useAppSelector } from '@/app/store/store';
-import { openBoardModal } from '@/app/store/boardSlice';
+import { useAppDispatch, openBoardModal } from '@/app/store';
 import { useEscapeListener } from '@/hooks/useEscapeListener';
 
 export function SettingModal({

@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { boards } from './data.json';
-import { Board, Task } from '../types';
+import { Board, Task } from '@/app/types';
 import { boardFormInfo } from './CONSTANT';
 
 export interface FormInput {
@@ -280,7 +280,7 @@ const boardSidebar = createSlice({
   },
 });
 
-export default boardSidebar.reducer;
+export const boardReducer = boardSidebar.reducer;
 export const {
   toggleModelView,
   toggleSidebar,

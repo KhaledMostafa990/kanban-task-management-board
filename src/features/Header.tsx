@@ -1,12 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '@/app/store/store';
-
-import { openBoardModal, toggleSidebar } from '@/app/store/boardSlice';
+import { useAppDispatch, useAppSelector, openBoardModal, toggleSidebar } from '@/app/store';
 import { Button, Logo } from '@/components/base';
 import { Row } from '@/components/layout';
-import { SettingModal } from './SettingModal';
+import { SettingModal } from '@/features/SettingModal';
 
 export default function Header() {
   const dispatch = useAppDispatch();
@@ -15,9 +13,11 @@ export default function Header() {
 
   const boardSettings = ['Edit Board', 'Delete Board'];
 
-  const showBoardSettings = () => {
-    setBoardSettingOpen(!boardSettingOpen);
-  };
+  const showBoardSettings = () => setBoardSettingOpen(!boardSettingOpen);
+
+  const onToggleSidebar = () => dispatch(toggleSidebar());
+
+  const onAddNewTask = () => dispatch(openBoardModal('createTask'));
 
   return (
     <header
@@ -40,7 +40,7 @@ export default function Header() {
 
             {activeBoard?.name && (
               <svg
-                onClick={() => dispatch(toggleSidebar())}
+                onClick={onToggleSidebar}
                 className="cursor-pointer md:hidden"
                 width="10"
                 height="7"
@@ -53,7 +53,7 @@ export default function Header() {
 
           <div className="flex items-center justify-center gap-4">
             {/* Add Task Button */}
-            <Button type="primary" withIcon onClick={() => dispatch(openBoardModal('createTask'))}>
+            <Button type="primary" withIcon onClick={onAddNewTask}>
               Add New Task
             </Button>
 

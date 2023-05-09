@@ -1,18 +1,17 @@
-import { useAppDispatch } from '@/app/store/store';
-import { toggleSubTaskStatus, toggleTaskStatus } from '@/app/store/boardSlice';
+import { useAppDispatch, toggleSubTaskStatus, toggleTaskStatus } from '@/app/store';
 import { Column, Task } from '@/app/types';
 import { SettingModal } from '@/features/SettingModal';
 import { useState } from 'react';
+import { SubTaskCounter } from './SubTaskCounter';
+import { SubTaskCheckbox } from './SubTaskCheckbox';
 
-export function ViewTask({ task, columns }: { task: Task | null; columns: Column[] }) {
+export function TaskPreview({ task, columns }: { task: Task | null; columns: Column[] }) {
   const dispatch = useAppDispatch();
   const [taskSettingOpen, setTaskSettingOpen] = useState<boolean>(false);
   const [currentColumn, setCurrentColumn] = useState<Column>(columns.filter((col) => col.name === task?.status)[0]);  
   const taskSettings = ['Edit Task', 'Delete Task'];  
 
-  const showTaskSetting = () => {
-    setTaskSettingOpen(!taskSettingOpen);
-  };
+  const showTaskSetting = () => setTaskSettingOpen(!taskSettingOpen);
 
   const handleSubTaskStatus = (subtaskId: string) => {      
     const colId = currentColumn.id;
@@ -21,8 +20,7 @@ export function ViewTask({ task, columns }: { task: Task | null; columns: Column
   };
 
   const handleTaskStatus = (taskId: string, nextCol: string, currentCol: string) => {
-    const nextColId = columns.find((col) => col.name === nextCol)?.id;
-    
+    const nextColId = columns.find((col) => col.name === nextCol)?.id;    
     if (currentColumn && nextColId) {
       dispatch(toggleTaskStatus({ currentCol, nextCol: nextColId ,taskId  }))
       setCurrentColumn(columns.filter((col) => col.name === nextCol)[0]);
@@ -44,30 +42,11 @@ export function ViewTask({ task, columns }: { task: Task | null; columns: Column
 
       <p className="text-bdoy-sm text-text-muted">{task?.description}</p>
 
-      <h3 className="text-base font-bold text-text-base">
-        {`Subtasks (${task?.subtasks.filter((subtask: any) => subtask.isCompleted).length} of ${
-          task?.subtasks.length
-        })`}
-      </h3>
+      <h3 className="text-base font-bold text-text-base"><SubTaskCounter task={task} /></h3>
 
       <div className="flex flex-col items-start gap-2.5">
-        {task?.subtasks.map((subTask) => (
-          <div
-            key={subTask.title}
-            className="inline-block flex gap-2 bg-background-secondary px-2 py-2.5 hover:bg-primary-25"            
-          >
-              <input
-                onChange={(e) => handleSubTaskStatus(subTask.id)}
-                type="checkbox" id={`subtask-${subTask.id}`} name={`subtask-${subTask.id}`} checked={subTask.isCompleted} />
-
-              <label
-                htmlFor={`subtask-${subTask.id}`}
-                onClick={(e) => e.stopPropagation()}
-                className="text-bold text-body-xs font-bold text-text-muted cursor-pointer"
-              >
-                {subTask.title}
-              </label>
-          </div>
+        {task?.subtasks.map((subTask) => (          
+          <SubTaskCheckbox key={subTask.title} subTask={subTask} onCheck={handleSubTaskStatus} />
         ))}
       </div>
 

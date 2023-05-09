@@ -1,4 +1,4 @@
-import { DeleteView } from './DeleteView';
+import { DeleteView } from '@/components/shared';
 import { Column, Task } from '@/app/types';
 
 export function DeleteTask({ task }: { task: Task | null; columns: Column[] }) {

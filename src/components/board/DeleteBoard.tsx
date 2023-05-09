@@ -1,4 +1,4 @@
-import { DeleteView } from './DeleteView';
+import { DeleteView } from '@/components/shared';
 
 export function DeleteBoard({ board }: { board: any }) {
   if (!board) return null;
