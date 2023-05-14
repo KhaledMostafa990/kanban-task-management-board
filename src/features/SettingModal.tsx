@@ -1,28 +1,23 @@
 'use client';
 
-import { useAppDispatch, useAppSelector } from '@/app/store/store';
-import { openBoardModal } from '@/app/store/boardSlice';
+import { useAppDispatch, openBoardModal } from '@/app/store';
 import { useEscapeListener } from '@/hooks/useEscapeListener';
 
 export function SettingModal({
   isOpen,
   settingList,
-  dataId,
-  columnId,
   onOpenSettings,
 }: {
   isOpen: boolean;
   settingList: string[];
-  dataId?: string;
-  columnId?: string;
   onOpenSettings: () => void;
 }) {
   const dispatch = useAppDispatch();
   const onOpenSetting = (settingName: string) => {
-    dispatch(
-      openBoardModal(settingName.charAt(0).toLowerCase() + settingName.slice(1).split(' ').join('')),
-    );
+    settingName = settingName.charAt(0).toLowerCase() + settingName.slice(1).split(' ').join('');
+    dispatch(openBoardModal(settingName));
   };
+
   useEscapeListener({isModelOpen: isOpen, toggleFunction: onOpenSettings});
   return (
     <>

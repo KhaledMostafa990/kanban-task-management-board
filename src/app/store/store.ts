@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import boardSidebar, { BoardSidebarState } from "./boardSlice";
+import { boardReducer, BoardSidebarState } from "./boardSlice";
 import { useDispatch, useSelector } from 'react-redux'
 import type { TypedUseSelectorHook } from 'react-redux'
 
@@ -7,9 +7,9 @@ export interface StoreState {
   sidebar: BoardSidebarState
 }
 
-const store = configureStore({
+export const store = configureStore({
   reducer: {
-    boardSidebar
+    boardSidebar: boardReducer
   }
 });
 
@@ -22,4 +22,4 @@ export type AppDispatch = typeof store.dispatch
 export const useAppDispatch: () => AppDispatch = useDispatch
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 
-export default store;
+// export store;

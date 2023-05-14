@@ -1,4 +1,4 @@
-import { Column } from '.';
+import { Column } from '@/app/types';
 import { TaskForm } from './TaskForm';
 
 export function CreateTask({columns , boardName} : {columns: Column[], boardName: string}) {

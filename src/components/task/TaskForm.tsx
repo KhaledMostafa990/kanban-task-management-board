@@ -1,15 +1,11 @@
 /* eslint-disable no-nested-ternary */
 import * as Yup from 'yup';
 import React, { useState } from 'react';
-import { taskFormInfo } from '@/app/store/CONSTANT';
 import { Form, Formik, FormikHelpers } from 'formik';
-import { useAppDispatch, useAppSelector } from '@/app/store/store';
-import { ErrorMessageWrapper } from './ErrorMessageWrapper';
-import { Button } from './Button';
-import { InputControl } from './InputControl';
+import { useAppDispatch, taskFormInfo, saveTask } from '@/app/store';
 import { Column, Task } from '@/app/types';
-import { InputField } from './InputField';
-import {  saveTask } from '@/app/store/boardSlice';
+import { Button, InputControl, InputField, ErrorMessageWrapper } from '@/components/base';
+import { createNewInput, getColsValuesFromDefaultValues, getFileteredInnerInputsValues, removeColumnInput, transformColumnsInputsToObject, validateInput } from '@/utils';
 
 interface CreateNewTaskValue {
   title: string;
@@ -19,118 +15,72 @@ interface CreateNewTaskValue {
 }
 
 export function TaskForm(
-  { defaultValues, columns, boardName }:
-  { defaultValues?: Task | null , columns: Column[], boardName: string}
+  { 
+    defaultValues,
+    columns 
+  } : {
+    defaultValues?: Task | null ,
+    columns: Column[]
+  }
   ) {
   const dispatch = useAppDispatch();
-  
-  const statusOptions = columns.map((col) => col.name);
-  
   const [formInputs, setFormInputs] = useState(taskFormInfo);
-
-  const colsKeys = formInputs
-    .filter((input) => input.inputs?.map((inp) => inp.name))[0]
-    .inputs?.map((i) => i.name);
+  const taskStatusOptions = columns.map((col) => col.name);
 
   const [initialValues] = useState<CreateNewTaskValue>(() => {
-    if (defaultValues == null) {
+    if (defaultValues == null) {        
+      const columnsInputs = transformColumnsInputsToObject(formInputs[2].inputs, '');
       return {
         title: '',
         description: '',
-        status: statusOptions[0],
-        ...colsKeys?.reduce((acc: any, curr) => {
-          acc[curr] = '';
-          return acc;
-        }, {}),
+        status: taskStatusOptions[0],
+        ...columnsInputs,
       };
     }
+
     if (formInputs[2].inputs && defaultValues != null) {
       const newFormInputs = formInputs.map((input) => {
         if (input.inputs) {
-          const inputs = defaultValues.subtasks.map((subTask, idx) => {
-            const newInputValues = {
-              id: subTask.id,
-              name: `column-${subTask.id}`,
-              value: subTask.title,
-              placeholder: subTask.title,
-            };
-
-            if (input.inputs && input.inputs[idx] != null) {
-              return {
-                ...input.inputs[idx],
-                ...newInputValues,
-              };
-            }
-
-            return {
-              ...input.inputs[0],
-              ...newInputValues,
-            };
-          });
+          const inputs = getColsValuesFromDefaultValues(defaultValues.subtasks, input);
           return { ...input, inputs };
         }
 
-        if (input.type === 'select') {
-          return {
-            ...input,
-            value: defaultValues.status,
-          };
-        }
-
-        return {
-          ...input,
-          value: input.name === 'title' ? defaultValues.title : defaultValues.description,
-        };
+        if (input.type === 'select') input.value = defaultValues.status;
+        if (input.type === 'textarea') input.value = defaultValues.description;
+        if (input.type === 'text') input.value = defaultValues.title;
+        return input;
       });
 
       setFormInputs(newFormInputs);
+
+      const columnsInputs = transformColumnsInputsToObject(newFormInputs[2].inputs);
 
       return {
         title: newFormInputs[0].value,
         description: newFormInputs[1].value,
         status: newFormInputs[3].value,
-        ...newFormInputs[2].inputs?.reduce((acc: any, curr) => {
-          acc[curr.name] = curr.value;
-          return acc;
-        }, {}),
+        ...columnsInputs,
       };
     }
     return null;
   });
 
-  const colsSchema = colsKeys?.reduce((acc: any, curr: any) => {
-    acc[curr] = Yup.string().min(3, 'please enter at least 3 characters').required("Can't be empty");
-    return acc;
-  }, {});
+  const colsSchema = transformColumnsInputsToObject(
+    formInputs[2].inputs, 
+    Yup.string().min(3, 'please enter at least 3 characters').required("Can't be empty")
+  );  
 
-  const TaskFormSChema = Yup.object().shape({
+  const TaskFormSchema = Yup.object().shape({
     title: Yup.string().min(3, 'please enter at least 3 characters').required("Can't be empty"),
     description: Yup.string().min(10, 'please enter at least 10 characters'),
     status: Yup.string().required("please select a status"),
     ...colsSchema,
   });
 
-  const validateInput = (input: string, getFieldMeta: any) => {
-    return !!getFieldMeta(input).touched && !getFieldMeta(input).error;
-  };
-
   const createNewColumn = () => {
-    console.dir('On Add: \n', { formInputs, defaultValues, initialValues });
     const newFormInputs = formInputs.map((input) => {
       if (input.inputs) {
-        const inpLength = input.inputs.length;
-        let newInnerInput;
-        if (inpLength === 0 && taskFormInfo[2].inputs) {
-          newInnerInput = taskFormInfo[2].inputs['0'];
-        } else {
-          newInnerInput = {
-            ...input.inputs[inpLength - 1],
-            name: `column-${Number(input.inputs[inpLength - 1].id) + 1}`,
-            id: `${Number(input.inputs[inpLength - 1].id) + 1}`,
-            value: '',
-            placeholder: '',
-          };
-        }
+        let newInnerInput = createNewInput(taskFormInfo[2].inputs, input);
         return { ...input, inputs: [...input.inputs, newInnerInput] };
       }
       return input;
@@ -140,26 +90,15 @@ export function TaskForm(
   };
 
   const removeColumn = (id: string) => {
-    console.log('On Revmoe: \n');
     const newFormInputs = formInputs.map((input) => {
       if (input.inputs) {
-        const inputs = input.inputs.filter((inp) => inp.id !== id);
-        inputs.map((innerInput, idx) => {
-          innerInput = {
-            ...innerInput,
-            value: innerInput.value,
-          };
-          console.log(innerInput, idx);
-          return innerInput;
-        });
-
+        const inputs = removeColumnInput(input.inputs, id);
         return { ...input, inputs };
       }
       return input;
     });
 
     setFormInputs(newFormInputs);
-    console.dir({ id, formInputs, defaultValues, initialValues });
   };
 
   const onSave = (
@@ -169,30 +108,23 @@ export function TaskForm(
     console.log('On Create: \n');
     console.dir({ values, formInputs, defaultValues, initialValues });
 
-    const filteredValues = Object.fromEntries(
-      Object.entries(values).filter(
-        ([key]) => formInputs[2].inputs && formInputs[2].inputs.some((input) => input.name === key),
-      ),
-    );
-
-    const colsNames: string[] = Object.values(filteredValues);
-    const existCols = defaultValues?.subtasks.filter((subtask) => {
-      return formInputs[2].inputs?.map((i) => i.id).includes(subtask.id);
-    });
-    console.dir({ colsNames, existCols, filteredValues, values, formInputs, defaultValues });
+    const {
+      filteredInnerInpsValues,
+      existInpsValues 
+    } = getFileteredInnerInputsValues(formInputs[2].inputs, values, defaultValues?.subtasks);
 
     dispatch(
       saveTask({
         task: {
-          id: defaultValues?.id || `${Date.now()}`,
+          id: defaultValues?.id || `${new Date().toISOString()}`,
           title: values.title,
           description: values.description,
           status: values.status,
-          subtasks: colsNames.map((title, idx) => {
+          subtasks: filteredInnerInpsValues.map((title, idx) => {
             return {
               id: `${idx + 1}`,
               title,
-              isCompleted: existCols?.[idx]?.isCompleted || false,            
+              isCompleted: existInpsValues?.[idx]?.isCompleted || false,            
             };
           }),
         }}
@@ -200,11 +132,11 @@ export function TaskForm(
     );
     setSubmitting(false);
   };
-  // console.dir({ formInputs, defaultValues, initialValues });
+
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={TaskFormSChema}
+      validationSchema={TaskFormSchema}
       onSubmit={onSave}
     >
       {({ isSubmitting, getFieldMeta, values, handleChange, handleBlur }) => (
@@ -244,22 +176,19 @@ export function TaskForm(
                     height="7"
                     xmlns="http://www.w3.org/2000/svg"
                   >
-                    <path stroke="#635FC7" stroke-width="2" fill="none" d="m1 1 4 4 4-4" />
+                    <path stroke="#635FC7" strokeWidth="2" fill="none" d="m1 1 4 4 4-4" />
                   </svg>
 
                   <InputField
-                    className=" w-full appearance-none border border-border-input bg-transparent 
-                      py-2 px-2.5 text-body-sm text-text-base placeholder:text-body-sm placeholder:text-text-base
-                      placeholder:opacity-25"
-                    name={input.name}
+                    className="appearance-none py-2 px-2.5"
                     type={input.type}
                     id={input.id}
+                    name={input.name}
                     value={values[input.name]}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    placeholder={input.placeholder || ''}
                   >
-                    {statusOptions.map((option) => (
+                    {taskStatusOptions.map((option) => (
                       <option
                         className="appearance-none bg-background-primary py-2 px-2.5 text-text-muted"
                         key={option}
@@ -298,7 +227,7 @@ export function TaskForm(
                       onClick={() => removeColumn(innerInput.id)}
                     >
                       <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg">
-                        <g fill="#828FA3" className="hover:fill-danger" fill-rule="evenodd">
+                        <g fill="#828FA3" className="hover:fill-danger" fillRule="evenodd">
                           <path d="m12.728 0 2.122 2.122L2.122 14.85 0 12.728z" />
                           <path d="M0 2.122 2.122 0 14.85 12.728l-2.122 2.122z" />
                         </g>

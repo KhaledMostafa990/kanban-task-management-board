@@ -1,38 +1,26 @@
 'use client';
 
-// import { boards } from '@/app/store/data.json';
-import { useAppDispatch, useAppSelector } from '@/app/store/store';
-import { toggleModelView } from '@/app/store/boardSlice';
-import {
-  CreateBoard,
-  CreateTask,
-  DeleteBoard,
-  DeleteTask,
-  EditBoard,
-  EditTask,
-  Overlay,
-  ViewTask,
-} from '../base';
-import { useEscapeListener } from '@/hooks/useEscapeListener';
+import { useAppDispatch, useAppSelector, toggleModelView } from '@/app/store';
+import {Overlay} from '@/components/base';
+import {CreateBoard, EditBoard, DeleteBoard} from '@/components/board';
+import {DeleteTask, CreateTask, EditTask } from '@/components/task';
 
-export default function Model() {
+import { useEscapeListener } from '@/hooks/useEscapeListener';
+import { TaskPreview } from './TaskPreview';
+
+export default function Modal() {
   const modelOpen = useAppSelector((state) => state.boardSidebar.models.open);
   const modelView = useAppSelector((state) => state.boardSidebar.models.modelView);
   const activeBoard = useAppSelector((state) => state.boardSidebar.activeBoard);
   const activeTask = useAppSelector((state) => state.boardSidebar.activeTask);
-
   const dispatch = useAppDispatch();
 
-  let modelContents = {};
+  let modelContents: {[key: string]: JSX.Element} = {};
 
-  if (modelView === 'createBoard') {
-    modelContents = {      
-      createBoard: <CreateBoard />,
-    };
-  } else if (activeBoard) {
+  if (activeBoard) {
     modelContents = {
       createTask: <CreateTask columns={activeBoard.columns} boardName={activeBoard.name} />,
-      viewTask: <ViewTask task={activeTask} columns={activeBoard.columns} />,
+      viewTask: <TaskPreview task={activeTask} columns={activeBoard.columns} />,
       editTask: <EditTask task={activeTask} columns={activeBoard.columns} boardName={activeBoard.name} />,
       deleteTask: <DeleteTask task={activeTask} columns={activeBoard.columns}  />,
   
@@ -40,12 +28,13 @@ export default function Model() {
       deleteBoard: <DeleteBoard board={activeBoard} />,
     };
   }
-  // console.log(modelView, modelOpen, activeBoard, activeTask);
+  
+  if (modelView === 'createBoard') modelContents[modelView] = <CreateBoard />;
   
   useEscapeListener({isModelOpen: modelOpen, toggleFunction: () => dispatch(toggleModelView())});
-  
-  if (!modelOpen) return null;
 
+  if (!modelOpen) return null;
+  
 
   return (
     <div

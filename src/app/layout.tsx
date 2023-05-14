@@ -1,10 +1,11 @@
 import './globals.scss';
 import { Plus_Jakarta_Sans } from 'next/font/google';
 
+import ReduxProvider from './store/ReduxProvider';
+
 import Header from '@/features/Header';
 import Sidebar from '@/features/Sidebar';
-import Model from '@/components/layout/Modal';
-import ReduxProvider from './store/ReduxProvider';
+import Modal  from '@/features/Modal';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -24,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <main className="w-full bg-background-secondary py-12">{children}</main>
             </div>
 
-            <Model />
+            <Modal />
           </div>
         </ReduxProvider>
       </body>
@@ -37,17 +38,16 @@ export const metadata = {
     default: 'Kanban Task Management Board',
     template: '%s | Board ',
   },
-  description:
-    'I’m a junior front-end developer looking for a new role in an exciting company. I focus on writing accessible HTML, using modern CSS practices and writing clean JavaScript.',
+  description: 'kanban board for task management, built with React, Redux, and Tailwind CSS',
   creator: 'Khaled Farghly',
 
   icons: {
-    icon: '/images/favicon-32x32.png',
-    shortcut: '/images/favicon-32x32.png',
-    apple: '/images/favicon-32x32.png',
+    icon: '/assets/favicon-32x32.png',
+    shortcut: '/assets/favicon-32x32.png',
+    apple: '/assets/favicon-32x32.png',
     other: {
-      rel: '/images/favicon-32x32.png',
-      url: '/images/favicon-32x32.png',
+      rel: '/assets/favicon-32x32.png',
+      url: '/assets/favicon-32x32.png',
     },
   },
 
@@ -65,11 +65,10 @@ export const metadata = {
 
   openGraph: {
     type: 'website',
-    siteName: 'Minimalist Portfolio',
-    title: 'Minimalist Portfolio',
-    description:
-      'Designo is over 10 years in the industry, we are experienced in creating fully responsive websites, app design, and engaging brand experiences.',
-    url: 'https://Alex-Minimalist-Portoflio.vercel.app/',
+    siteName: 'Kanban Task Management Board',
+    title: 'Kanban Task Management Board',
+    description: 'kanban board for task management, built with React, Redux, and Tailwind CSS',
+    url: 'https://kanban-task-management-board.vercel.app/',
     locale: 'en_IE',
     images: [],
   },

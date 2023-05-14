@@ -14,7 +14,7 @@ export function ErrorMessageWrapper({ input, hasIcon }: { input: string; hasIcon
             {msg}
             {/* <Image src={errorIcon} alt="error icon" width={16} height={16} /> */}
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20">
-              <g fill="none" fill-rule="evenodd">
+              <g fill="none" fillRule="evenodd">
                 <circle cx="10" cy="10" r="10" fill="#fafafa" />
                 <path fill="#F43030" d="M11 14v2H9v-2h2zm0-9v7H9V5h2z" />
               </g>
