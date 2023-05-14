@@ -53,12 +53,7 @@ export default function Header() {
 
           <div className="flex items-center justify-center gap-4">
             {/* Add Task Button */}
-            <Button
-              type="primary"
-              withIcon
-              onClick={onAddNewTask}
-              isDisabled={!activeBoard?.name}
-              >
+            <Button type="primary" withIcon onClick={onAddNewTask} isDisabled={!activeBoard?.name}>
               Add New Task
             </Button>
 
@@ -67,7 +62,7 @@ export default function Header() {
               <SettingModal
                 isOpen={boardSettingOpen}
                 settingList={boardSettings}
-                onOpenSettings={showBoardSettings}                
+                onOpenSettings={showBoardSettings}
               />
             </div>
           </div>

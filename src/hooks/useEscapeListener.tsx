@@ -1,13 +1,17 @@
 'use client';
 
 import { useEffect } from 'react';
-export const useEscapeListener = (
-  { isModelOpen, toggleFunction }: { isModelOpen: boolean; toggleFunction: () => void; }) => {
 
+export const useEscapeListener = ({
+  isModelOpen,
+  toggleFunction,
+}: {
+  isModelOpen: boolean;
+  toggleFunction: () => void;
+}) => {
   useEffect(() => {
     const onEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isModelOpen)
-        toggleFunction();
+      if (e.key === 'Escape' && isModelOpen) toggleFunction();
     };
 
     document.addEventListener('keydown', onEscape);

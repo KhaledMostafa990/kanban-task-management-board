@@ -1,9 +1,9 @@
 'use client';
 
 import { useAppDispatch, useAppSelector, toggleModelView } from '@/app/store';
-import {Overlay} from '@/components/base';
-import {CreateBoard, EditBoard, DeleteBoard} from '@/components/board';
-import {DeleteTask, CreateTask, EditTask } from '@/components/task';
+import { Overlay } from '@/components/base';
+import { CreateBoard, EditBoard, DeleteBoard } from '@/components/board';
+import { DeleteTask, CreateTask, EditTask } from '@/components/task';
 
 import { useEscapeListener } from '@/hooks/useEscapeListener';
 import { TaskPreview } from './TaskPreview';
@@ -15,32 +15,31 @@ export default function Modal() {
   const activeTask = useAppSelector((state) => state.boardSidebar.activeTask);
   const dispatch = useAppDispatch();
 
-  let modelContents: {[key: string]: JSX.Element} = {};
+  let modelContents: { [key: string]: JSX.Element } = {};
 
   if (activeBoard) {
     modelContents = {
-      createTask: <CreateTask columns={activeBoard.columns} boardName={activeBoard.name} />,
+      createTask: <CreateTask columns={activeBoard.columns} />,
       viewTask: <TaskPreview task={activeTask} columns={activeBoard.columns} />,
-      editTask: <EditTask task={activeTask} columns={activeBoard.columns} boardName={activeBoard.name} />,
-      deleteTask: <DeleteTask task={activeTask} columns={activeBoard.columns}  />,
-  
+      editTask: <EditTask task={activeTask} columns={activeBoard.columns} />,
+      deleteTask: <DeleteTask task={activeTask} columns={activeBoard.columns} />,
+
       editBoard: <EditBoard board={activeBoard} />,
       deleteBoard: <DeleteBoard board={activeBoard} />,
     };
   }
-  
+
   if (modelView === 'createBoard') modelContents[modelView] = <CreateBoard />;
-  
-  useEscapeListener({isModelOpen: modelOpen, toggleFunction: () => dispatch(toggleModelView())});
+
+  useEscapeListener({ isModelOpen: modelOpen, toggleFunction: () => dispatch(toggleModelView()) });
 
   if (!modelOpen) return null;
-  
 
   return (
     <div
-     className="bg-text-muted/50 fixed left-0 top-0 z-50 flex h-screen w-screen
+      className="bg-text-muted/50 fixed left-0 top-0 z-50 flex h-screen w-screen
     items-center justify-center overflow-y-scroll"
-     >
+    >
       <Overlay onClick={() => dispatch(toggleModelView())} />
 
       <div className=" absolute top-[11%] z-50 flex w-[340px] flex-col gap-6 bg-background-primary px-4 py-6 lg:w-[480px]">

@@ -1,10 +1,15 @@
 'use client';
-import { BoardColumn } from '@/components/board';
+
 import { Row } from '@/components/layout';
 import { PlusIcon } from '@/components/icons';
-import { Board } from '@/app/types';
 
-export function ActiveBoardView({ onAddColumnClick, children }: { onAddColumnClick: any; children: React.ReactNode }) {
+export function ActiveBoardView({
+  onAddColumnClick,
+  children,
+}: {
+  onAddColumnClick: any;
+  children: React.ReactNode;
+}) {
   return (
     <section className="h-full w-full">
       <div className="container h-full min-h-max lg:w-full 2xl:w-[1111px]">
@@ -12,7 +17,7 @@ export function ActiveBoardView({ onAddColumnClick, children }: { onAddColumnCli
           <div className="flex  gap-6">
             {children}
 
-            <div 
+            <div
               className="relative top-[43px] flex min-h-[200px] min-w-[280px] items-center justify-center
               rounded-md bg-gradient-to-b from-background-primary"
             >

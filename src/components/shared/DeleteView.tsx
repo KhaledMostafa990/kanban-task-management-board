@@ -1,7 +1,7 @@
 import { useAppDispatch } from '@/app/store/store';
 import { deleteBoardOrTask, toggleModelView } from '@/app/store/boardSlice';
 import { Board, Task } from '@/app/types';
-import { Button } from  '@/components/base';
+import { Button } from '@/components/base';
 
 export function DeleteView({
   type,
@@ -13,17 +13,19 @@ export function DeleteView({
   data: Board | Task | null;
 }) {
   const dispatch = useAppDispatch();
-  
+
   const onDeleteBoardOrTask = () => {
     let statusName = '';
 
     if (data && 'status' in data) statusName = data.status;
-    
-    dispatch(deleteBoardOrTask({
-      type: type,
-      id: data != null ? data.id : '',
-      taskStatus: statusName,
-    }));
+
+    dispatch(
+      deleteBoardOrTask({
+        type,
+        id: data != null ? data.id : '',
+        taskStatus: statusName,
+      }),
+    );
 
     dispatch(toggleModelView());
   };

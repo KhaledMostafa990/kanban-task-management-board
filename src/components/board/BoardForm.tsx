@@ -7,9 +7,16 @@ import { Form, Formik, FormikHelpers } from 'formik';
 import { createNewBoard } from '@/app/store';
 import { Board } from '@/app/types';
 import { Button, InputControl, InputField, ErrorMessageWrapper } from '@/components/base';
-import { createNewInput, getColsValuesFromDefaultValues, getFileteredInnerInputsValues, removeColumnInput, transformColumnsInputsToObject, validateInput } from '@/utils';
+import {
+  createNewInput,
+  getColsValuesFromDefaultValues,
+  getFileteredInnerInputsValues,
+  removeColumnInput,
+  transformColumnsInputsToObject,
+  validateInput,
+} from '@/utils';
 
-interface CreateNewBoardValue { 
+interface CreateNewBoardValue {
   name: string;
   [key: string]: string;
 }
@@ -23,7 +30,7 @@ export function BoardForm({ defaultValues }: { defaultValues?: Board }) {
       const columnsInputs = transformColumnsInputsToObject(formInputs[1].inputs, '');
       return {
         name: '',
-        ...columnsInputs
+        ...columnsInputs,
       };
     }
 
@@ -56,18 +63,18 @@ export function BoardForm({ defaultValues }: { defaultValues?: Board }) {
 
   const colsSchema = transformColumnsInputsToObject(
     formInputs[1].inputs,
-    Yup.string().min(3, 'please enter at least 3').required("Can't be empty")
-  );      
+    Yup.string().min(3, 'please enter at least 3').required("Can't be empty"),
+  );
 
   const BoardFormSChema = Yup.object().shape({
     name: Yup.string().min(3, 'please enter at least 3 characters').required("Can't be empty"),
     ...colsSchema,
   });
 
-  const createNewColumn = () => {   
+  const createNewColumn = () => {
     const newFormInputs = formInputs.map((input) => {
       if (input.inputs) {
-        let newInnerInput = createNewInput(boardFormInfo[1].inputs, input);
+        const newInnerInput = createNewInput(boardFormInfo[1].inputs, input);
         return { ...input, inputs: [...input.inputs, newInnerInput] };
       }
       return input;
@@ -76,7 +83,7 @@ export function BoardForm({ defaultValues }: { defaultValues?: Board }) {
     setFormInputs(newFormInputs);
   };
 
-  const removeColumn = (id: string) => {   
+  const removeColumn = (id: string) => {
     const newFormInputs = formInputs.map((input) => {
       if (input.inputs) {
         const inputs = removeColumnInput(input.inputs, id);
@@ -85,17 +92,18 @@ export function BoardForm({ defaultValues }: { defaultValues?: Board }) {
       return input;
     });
 
-    setFormInputs(newFormInputs);   
+    setFormInputs(newFormInputs);
   };
 
   const onSave = (
     values: CreateNewBoardValue,
     { setSubmitting }: FormikHelpers<CreateNewBoardValue>,
-  ) => {      
-    const {
-      filteredInnerInpsValues,
-      existInpsValues
-    } = getFileteredInnerInputsValues(formInputs[1].inputs, values, defaultValues?.columns);
+  ) => {
+    const { filteredInnerInpsValues, existInpsValues } = getFileteredInnerInputsValues(
+      formInputs[1].inputs,
+      values,
+      defaultValues?.columns,
+    );
 
     dispatch(
       createNewBoard({
@@ -116,11 +124,7 @@ export function BoardForm({ defaultValues }: { defaultValues?: Board }) {
   // console.dir({ formInputs, defaultValues, initialValues });
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={BoardFormSChema}
-      onSubmit={onSave}
-    >
+    <Formik initialValues={initialValues} validationSchema={BoardFormSChema} onSubmit={onSave}>
       {({ isSubmitting, getFieldMeta, values, handleChange, handleBlur }) => (
         <Form className="flex flex-col gap-6">
           {formInputs.map((input) => {
