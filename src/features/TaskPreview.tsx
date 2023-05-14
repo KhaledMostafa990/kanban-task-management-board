@@ -1,30 +1,33 @@
-import { useAppDispatch, toggleSubTaskStatus, toggleTaskStatus } from '@/app/store';
+import { useAppDispatch, toggleSubTaskStatus, toggleTaskStatus, setActiveTask, openBoardModal, useAppSelector } from '@/app/store';
 import { Column, Task } from '@/app/types';
 import { SettingModal } from '@/features/SettingModal';
 import { useState } from 'react';
-import { SubTaskCounter } from './SubTaskCounter';
-import { SubTaskCheckbox } from './SubTaskCheckbox';
+import { SubTaskCounter,  SubTaskCheckbox } from '@/components/task';
 
-export function TaskPreview({ task, columns }: { task: Task | null; columns: Column[] }) {
+export function TaskPreview(
+  { task,
+    columns,
+  }: {
+    task: Task | null;
+    columns: Column[];
+  }) {
   const dispatch = useAppDispatch();
+  const currentColumn = useAppSelector((state) => state.boardSidebar.activeBoard.columns.find((col) => col.name === task?.status));
   const [taskSettingOpen, setTaskSettingOpen] = useState<boolean>(false);
-  const [currentColumn, setCurrentColumn] = useState<Column>(columns.filter((col) => col.name === task?.status)[0]);  
+
   const taskSettings = ['Edit Task', 'Delete Task'];  
 
   const showTaskSetting = () => setTaskSettingOpen(!taskSettingOpen);
 
   const handleSubTaskStatus = (subtaskId: string) => {      
-    const colId = currentColumn.id;
+    const colId = currentColumn?.id!;
     const taskId = task?.id as string;
     dispatch(toggleSubTaskStatus({ colId, taskId , subtaskId }))
   };
 
   const handleTaskStatus = (taskId: string, nextCol: string, currentCol: string) => {
-    const nextColId = columns.find((col) => col.name === nextCol)?.id;    
-    if (currentColumn && nextColId) {
-      dispatch(toggleTaskStatus({ currentCol, nextCol: nextColId ,taskId  }))
-      setCurrentColumn(columns.filter((col) => col.name === nextCol)[0]);
-    }
+    nextCol = columns.filter((col) => col.name === nextCol)[0].id as string;
+    dispatch(toggleTaskStatus({ currentCol, nextCol , taskId}))
   }
 
   return (
@@ -34,8 +37,6 @@ export function TaskPreview({ task, columns }: { task: Task | null; columns: Col
         <SettingModal
           isOpen={taskSettingOpen}
           settingList={taskSettings}
-          dataId={task?.id}
-          columnId={currentColumn?.id}
           onOpenSettings={showTaskSetting}
         />
       </div>
@@ -53,8 +54,8 @@ export function TaskPreview({ task, columns }: { task: Task | null; columns: Col
       <div className="flex flex-col gap-2.5">
         <h3 className="text-base font-bold text-text-base">Current Status</h3>
         <select
-          value={currentColumn.name}
-          onChange={(e) => handleTaskStatus(task?.id as string, e.target.value, currentColumn?.id)}
+          value={currentColumn?.name}
+          onChange={(e) => handleTaskStatus(task?.id as string, e.target.value, currentColumn?.id!)}
           className="h-[40px] w-full rounded-md bg-background-secondary px-2 text-text-base"
         >
           {columns.map((column: any) => (

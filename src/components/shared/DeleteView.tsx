@@ -1,5 +1,5 @@
-import { useAppDispatch, useAppSelector } from '@/app/store/store';
-import { deleteBoardOrTask, toggleActiveBoard, toggleModelView } from '@/app/store/boardSlice';
+import { useAppDispatch } from '@/app/store/store';
+import { deleteBoardOrTask, toggleModelView } from '@/app/store/boardSlice';
 import { Board, Task } from '@/app/types';
 import { Button } from  '@/components/base';
 
@@ -14,12 +14,10 @@ export function DeleteView({
 }) {
   const dispatch = useAppDispatch();
   
-  const onDeleteBoardOrdeleteBoardOrTask = () => {
+  const onDeleteBoardOrTask = () => {
     let statusName = '';
 
-    if (data && 'status' in data) {
-       statusName = data.status;
-    }
+    if (data && 'status' in data) statusName = data.status;
     
     dispatch(deleteBoardOrTask({
       type: type,
@@ -40,7 +38,7 @@ export function DeleteView({
       </p>
 
       <div className="flex flex-col gap-3">
-        <Button type="danger" onClick={onDeleteBoardOrdeleteBoardOrTask}>
+        <Button type="danger" onClick={onDeleteBoardOrTask}>
           Delete
         </Button>
         <Button type="secondary" onClick={() => dispatch(toggleModelView())}>

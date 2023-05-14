@@ -1,8 +1,9 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { boards } from './data.json';
+import data from './data.json';
 import { Board, Task } from '@/app/types';
 import { boardFormInfo } from './CONSTANT';
 
+const { boards } = data;
 export interface FormInput {
   label?: string;
   id?: string;
@@ -151,33 +152,47 @@ const boardSidebar = createSlice({
     },
 
     saveTask(state, actions: PayloadAction<{task: Task}>) {
-      const activeTask = state.activeBoard.columns
-      .filter((col)=> col.name === actions.payload.task.status)[0]
-      .tasks.find((task) => task.id === actions.payload.task.id);
+      const activeTask = state.activeTask;      
+      if (activeTask && activeTask.id === actions.payload.task.id) {
+        console.log(activeTask, activeTask?.id);
+        const previowsStatus = activeTask.status;
+        const statusChanged = previowsStatus !== actions.payload.task.status;          
 
-      if (activeTask) {
         activeTask.title = actions.payload.task.title;
         activeTask.description = actions.payload.task.description;
         activeTask.subtasks = actions.payload.task.subtasks;
+        activeTask.status = actions.payload.task.status;        
+        
+        const newColumns = state.activeBoard.columns.map((col) => {
+          if (statusChanged && col.name === previowsStatus) {
+            col.tasks = col.tasks.filter((task) => task.id !== actions.payload.task.id);
+          }
+
+          if (statusChanged && col.name === actions.payload.task.status) {
+            activeTask.id = `${new Date().toISOString()}-${col.tasks.length + 1}`;
+            return { ...col, tasks: [...col.tasks, activeTask] };
+          } else if (col.name === actions.payload.task.status) {
+            return {
+              ...col, 
+              tasks: col.tasks.map((task) => {
+                if (task.id === actions.payload.task.id) {  
+                  return activeTask;
+                }
+                return task;
+              }),
+             };
+          }
+          return col;
+        });
         
         state.boards = state.boards.map((board) => {
           if (board.id === state.activeBoard.id) {
             return {
               ...state.activeBoard,
-              columns: state.activeBoard.columns.map((col) => {
-                if (col.name === actions.payload.task.status) {
-                  return {
-                    ...col,
-                    tasks: col.tasks.map((task) => {
-                      if (task.id === actions.payload.task.id) return activeTask;
-                      return task;
-                    }),
-                  };
-                }
-                return col;
-              }),
+              columns: newColumns,
             };
           }
+          
           return board;
         });
       } else {
@@ -238,35 +253,32 @@ const boardSidebar = createSlice({
 
     toggleTaskStatus(state, actions: PayloadAction<{currentCol: string, nextCol: string, taskId: string}>) {
       const currentBoard = state.activeBoard;
+      const activeTask = state.activeTask;      
+
       const currentColumn = currentBoard.columns
       .filter((col)=> col.id === actions.payload.currentCol)[0];
 
       const nextColumn = currentBoard.columns
       .filter((col)=> col.id === actions.payload.nextCol)[0];
       
-      const activeTask = currentColumn.tasks
-      .filter((task) => task.id === actions.payload.taskId)[0];
       
-      if (activeTask) {
-        
-        currentColumn.tasks = currentColumn.tasks.filter((task) => 
-        task.id !== activeTask.id || task.id !== actions.payload.taskId);
-        if (nextColumn.tasks.length > 0) {
-          nextColumn.tasks  = [...nextColumn.tasks, activeTask];
-        } else {
-          nextColumn.tasks = [activeTask];
-        }
+      if (activeTask && currentColumn && nextColumn) {        
+        currentColumn.tasks = currentColumn.tasks.filter((task) => task.id !== actions.payload.taskId);
 
         activeTask.status = nextColumn.name;
-        activeTask.id = `${nextColumn.tasks.length + 1}-${activeTask.title.slice(0,10)}`;
+        activeTask.id = `${nextColumn.tasks.length + 1}-${activeTask?.title.slice(0,3)}`;        
         
-        state.activeTask = activeTask;
-
+        
+        if (nextColumn.tasks.length > 0) {
+          nextColumn.tasks  = [...nextColumn.tasks, activeTask];
+        } else nextColumn.tasks = [activeTask];  
+        
+        
         state.boards = state.boards.map((board) => {
-          if (board.id === state.activeBoard.id) {
+          if (board.id === currentBoard.id) {
             return {
-              ...state.activeBoard,
-              columns: state.activeBoard.columns.map((col) => {
+              ...board,
+              columns: board.columns.map((col) => {
                 if (col.id === actions.payload.currentCol) return currentColumn;                
                 if (col.id === actions.payload.nextCol) return nextColumn;
                 return col;
@@ -274,8 +286,9 @@ const boardSidebar = createSlice({
             }
           }
           return board;
-        })
-      }
+        }); 
+        state.activeTask = activeTask;
+      }   
     }            
   },
 });

@@ -20,14 +20,12 @@ export function Button({
   const disabled = isDisabled && 'opacity-25';
   const textColor = type === 'secondary' ? 'text-primary-base' : 'text-white';
   const HovereColor =
-    // eslint-disable-next-line no-nested-ternary
     type === 'primary'
       ? 'hover:bg-btn-primary-hover'
       : type === 'secondary'
       ? 'hover:bg-btn-secondary-hover'
       : 'hover:bg-btn-danger-hover';
   const bgColor =
-    // eslint-disable-next-line no-nested-ternary
     type === 'primary'
       ? 'bg-btn-primary'
       : type === 'secondary'
@@ -39,10 +37,11 @@ export function Button({
       <button
         className={`relative flex items-center justify-center gap-1 rounded-full px-3 py-2
         text-body-sm font-bold transition-all duration-500 md:px-5 md:py-2.5
-        ${HovereColor} ${textColor} ${bgColor} ${disabled}
+        ${HovereColor} ${textColor} ${bgColor} ${disabled} ${isDisabled && 'cursor-not-allowed hover:bg-btn-primary'}
         `}
         type={submitBtn ? 'submit' : 'button'}
         onClick={onClick}
+        disabled={isDisabled}
       >
         {type === 'primary' && withIcon ? (
           <span className="hidden md:order-2 md:inline">{children}</span>

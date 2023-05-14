@@ -2,17 +2,17 @@
 
 import { useAppDispatch, useAppSelector, toggleModelView } from '@/app/store';
 import {Overlay} from '@/components/base';
-import {CreateBoard,EditBoard,DeleteBoard,} from '@/components/board';
-import {DeleteTask, CreateTask, EditTask, TaskPreview} from '@/components/task';
+import {CreateBoard, EditBoard, DeleteBoard} from '@/components/board';
+import {DeleteTask, CreateTask, EditTask } from '@/components/task';
 
 import { useEscapeListener } from '@/hooks/useEscapeListener';
+import { TaskPreview } from './TaskPreview';
 
 export default function Modal() {
   const modelOpen = useAppSelector((state) => state.boardSidebar.models.open);
   const modelView = useAppSelector((state) => state.boardSidebar.models.modelView);
   const activeBoard = useAppSelector((state) => state.boardSidebar.activeBoard);
   const activeTask = useAppSelector((state) => state.boardSidebar.activeTask);
-
   const dispatch = useAppDispatch();
 
   let modelContents: {[key: string]: JSX.Element} = {};
