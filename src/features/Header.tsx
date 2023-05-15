@@ -27,8 +27,8 @@ export default function Header() {
         <Logo />
       </div>
 
-      <div className="container py-6">
-        <Row className="flex items-center justify-between">
+      <div className="container py-6 px-6">
+        <Row className="flex items-center justify-between max-w-full">
           {/* Board Heading */}
           <h1
             className="flex w-[calc(100%/1.80)] max-w-fit items-center gap-1.5 text-text-base"

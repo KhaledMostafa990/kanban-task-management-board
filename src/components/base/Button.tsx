@@ -1,5 +1,15 @@
 import React from 'react';
 
+interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
+  children: React.ReactNode;
+  submitBtn?: boolean;
+  type: 'primary' | 'secondary' | 'danger' | 'warning';
+  isDisabled?: boolean;
+  withIcon?: boolean;
+  iconSmall?: boolean;
+  onClick?: () => void;
+}
+
 export function Button({
   children,
   submitBtn,
@@ -8,15 +18,8 @@ export function Button({
   withIcon,
   iconSmall,
   onClick,
-}: {
-  children: React.ReactNode;
-  submitBtn?: boolean;
-  type: 'primary' | 'secondary' | 'danger' | 'warning';
-  isDisabled?: boolean;
-  withIcon?: boolean;
-  iconSmall?: boolean;
-  onClick?: () => void;
-}) {
+  ...props
+}: ButtonProps) {
   const disabled = isDisabled && 'opacity-25';
   const textColor = type === 'secondary' ? 'text-primary-base' : 'text-white';
   const HovereColor =
@@ -38,9 +41,9 @@ export function Button({
       <button
         className={`relative flex items-center justify-center gap-1 rounded-full px-3 py-2
         text-body-sm font-bold transition-all duration-500 md:px-5 md:py-2.5
-        ${HovereColor} ${textColor} ${bgColor} ${disabled} ${
-          isDisabled && 'cursor-not-allowed hover:bg-btn-primary'
-        }
+        ${HovereColor} ${textColor} ${bgColor} ${disabled} 
+        ${isDisabled && 'cursor-not-allowed hover:bg-btn-primary'}
+        ${props.className}
         `}
         type={submitBtn ? 'submit' : 'button'}
         onClick={onClick}

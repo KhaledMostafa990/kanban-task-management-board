@@ -39,11 +39,19 @@ export function DeleteView({
         tasks and cannot be reversed.
       </p>
 
-      <div className="flex flex-col gap-3">
-        <Button type="danger" onClick={onDeleteBoardOrTask}>
+      <div className="flex flex-col gap-3 md:flex-row w-full">
+        <Button
+          className={'min-w-[calc(50%-6px)]'}
+          type="danger"
+          onClick={onDeleteBoardOrTask}
+        >
           Delete
         </Button>
-        <Button type="secondary" onClick={() => dispatch(toggleModelView())}>
+        <Button
+          className={'min-w-[calc(50%-6px)]'}
+          type="secondary"
+          onClick={() => dispatch(toggleModelView())}
+        >
           Cancel
         </Button>
       </div>

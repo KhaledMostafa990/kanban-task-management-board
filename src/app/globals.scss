@@ -67,7 +67,7 @@
 }
 
 .container {
-  @apply grid grid-cols-12 max-w-[100vw] lg:max-w-full 2xl:w-[1111px] mx-auto;  
+  @apply grid grid-cols-12 max-w-[100vw] lg:max-w-full;  
 }
 
 /* Set the width of the scrollbar */

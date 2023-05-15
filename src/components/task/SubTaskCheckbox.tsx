@@ -10,7 +10,7 @@ export function SubTaskCheckbox({
 }) {
   return (
     <div
-      className="inline-block flex cursor-pointer gap-2 bg-background-secondary px-2 py-2.5 hover:bg-primary-25"
+      className="w-full flex cursor-pointer gap-2 bg-background-secondary px-2 py-2.5 hover:bg-primary-25"
       onClick={() => onCheck(subTask.id)}
     >
       <input

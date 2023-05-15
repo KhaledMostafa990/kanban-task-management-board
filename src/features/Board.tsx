@@ -24,7 +24,7 @@ export default function Board() {
   return (
     <ActiveBoardView onAddColumnClick={onAddColumnClick}>
       {activeBoard.columns.map((column: any) => (
-        <BoardColumn key={column.id} tasksLength={column.tasks.length} columnName={column.name}>
+        <BoardColumn key={column.id} index={column.id} tasksLength={column.tasks.length} columnName={column.name}>
           {column.tasks.map((task: any) => (
             <TaskCard key={task.id} task={task} onClick={() => onOpenTask(task.id, column.id)} />
           ))}

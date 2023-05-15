@@ -13,6 +13,7 @@ import {
   transformColumnsInputsToObject,
   validateInput,
 } from '@/utils';
+import { ArrowIcon } from '../icons';
 
 interface CreateNewTaskValue {
   title: string;
@@ -171,14 +172,7 @@ export function TaskForm({
                 </div>
               ) : input.type === 'select' ? (
                 <div className="relative">
-                  <svg
-                    className="absolute top-[50%] right-6 translate-y-[-50%]"
-                    width="10"
-                    height="7"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path stroke="#635FC7" strokeWidth="2" fill="none" d="m1 1 4 4 4-4" />
-                  </svg>
+                  <ArrowIcon className="absolute top-[50%] right-6 translate-y-[-50%]" />
 
                   <InputField
                     className="appearance-none py-2 px-2.5"
