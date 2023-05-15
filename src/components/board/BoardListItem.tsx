@@ -1,9 +1,11 @@
 import { ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
 
-export function BoardListItem(props: DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> ) {
+export function BoardListItem(
+  props: DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>,
+) {
   const { className, children, onClick } = props ?? {};
   return (
-    <button      
+    <button
       {...props}
       onClick={onClick}
       className={` ${

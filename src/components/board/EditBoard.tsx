@@ -1,5 +1,5 @@
-import { BoardForm } from './BoardForm';
 import { Board } from '@/app/types';
+import { BoardForm } from './BoardForm';
 
 export function EditBoard({ board }: { board: Board }) {
   return (

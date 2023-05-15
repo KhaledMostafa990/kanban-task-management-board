@@ -27,8 +27,8 @@ export default function Header() {
         <Logo />
       </div>
 
-      <div className="container py-6">
-        <Row className="flex items-center justify-between">
+      <div className="container py-6 px-6">
+        <Row className="flex items-center justify-between max-w-full">
           {/* Board Heading */}
           <h1
             className="flex w-[calc(100%/1.80)] max-w-fit items-center gap-1.5 text-text-base"
@@ -53,12 +53,7 @@ export default function Header() {
 
           <div className="flex items-center justify-center gap-4">
             {/* Add Task Button */}
-            <Button
-              type="primary"
-              withIcon
-              onClick={onAddNewTask}
-              isDisabled={!activeBoard?.name}
-              >
+            <Button type="primary" withIcon onClick={onAddNewTask} isDisabled={!activeBoard?.name}>
               Add New Task
             </Button>
 
@@ -67,7 +62,7 @@ export default function Header() {
               <SettingModal
                 isOpen={boardSettingOpen}
                 settingList={boardSettings}
-                onOpenSettings={showBoardSettings}                
+                onOpenSettings={showBoardSettings}
               />
             </div>
           </div>

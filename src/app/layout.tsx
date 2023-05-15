@@ -1,11 +1,10 @@
 import './globals.scss';
 import { Plus_Jakarta_Sans } from 'next/font/google';
 
-import ReduxProvider from './store/ReduxProvider';
-
 import Header from '@/features/Header';
 import Sidebar from '@/features/Sidebar';
-import Modal  from '@/features/Modal';
+import Modal from '@/features/Modal';
+import ReduxProvider from './store/ReduxProvider';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],

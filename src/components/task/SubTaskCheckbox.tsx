@@ -1,5 +1,5 @@
-import { SubTask } from '@/app/types'
-import React from 'react'
+import { SubTask } from '@/app/types';
+import React from 'react';
 
 export function SubTaskCheckbox({
   subTask,
@@ -10,22 +10,22 @@ export function SubTaskCheckbox({
 }) {
   return (
     <div
-      className="inline-block cursor-pointer flex gap-2 bg-background-secondary px-2 py-2.5 hover:bg-primary-25"            
-      onClick={(e) => onCheck(subTask.id)}
+      className="w-full flex cursor-pointer gap-2 bg-background-secondary px-2 py-2.5 hover:bg-primary-25"
+      onClick={() => onCheck(subTask.id)}
     >
-        <input
-          onChange={(e) => onCheck(subTask.id)}
-          type="checkbox"
-          id={`subtask-${subTask.id}`}
-          name={`subtask-${subTask.id}`}
-          checked={subTask.isCompleted}
-        />
-        <label
-          htmlFor={`subtask-${subTask.id}`}                
-          className="text-bold text-body-xs select-none font-bold text-text-muted cursor-pointer"
-        >
-          {subTask.title}
-        </label>
+      <input
+        onChange={() => onCheck(subTask.id)}
+        type="checkbox"
+        id={`subtask-${subTask.id}`}
+        name={`subtask-${subTask.id}`}
+        checked={subTask.isCompleted}
+      />
+      <label
+        htmlFor={`subtask-${subTask.id}`}
+        className="text-bold cursor-pointer select-none text-body-xs font-bold text-text-muted"
+      >
+        {subTask.title}
+      </label>
     </div>
-  )
+  );
 }

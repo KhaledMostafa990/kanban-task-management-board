@@ -1,18 +1,26 @@
 'use client';
-import { BoardColumn } from '@/components/board';
+
 import { Row } from '@/components/layout';
 import { PlusIcon } from '@/components/icons';
-import { Board } from '@/app/types';
+import { useAppSelector } from '@/app/store';
 
-export function ActiveBoardView({ onAddColumnClick, children }: { onAddColumnClick: any; children: React.ReactNode }) {
+export function ActiveBoardView({
+  onAddColumnClick,
+  children,
+}: {
+  onAddColumnClick: any;
+  children: React.ReactNode;
+}) {
+  const isSidebarOpen = useAppSelector((state) => state.boardSidebar.sidebarActive);
+  console.log('isSidebarOpen', isSidebarOpen);
   return (
     <section className="h-full w-full">
-      <div className="container h-full min-h-max lg:w-full 2xl:w-[1111px]">
-        <Row className="h-[calc(100vh-141px)] overflow-x-scroll">
-          <div className="flex  gap-6">
+      <div className={`container h-full min-h-max lg:w-full pl-6 md:pl-0 ${!isSidebarOpen && 'md:pl-6'}`}>
+        <Row className={`h-[calc(100vh-141px)] overflow-scroll  ${isSidebarOpen && 'md:max-w-[calc(100vw-302px)] mx-auto'}`}>
+          <div className="flex  gap-4">
             {children}
 
-            <div 
+            <div
               className="relative top-[43px] flex min-h-[200px] min-w-[280px] items-center justify-center
               rounded-md bg-gradient-to-b from-background-primary"
             >

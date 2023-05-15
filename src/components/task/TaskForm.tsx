@@ -5,7 +5,15 @@ import { Form, Formik, FormikHelpers } from 'formik';
 import { useAppDispatch, taskFormInfo, saveTask } from '@/app/store';
 import { Column, Task } from '@/app/types';
 import { Button, InputControl, InputField, ErrorMessageWrapper } from '@/components/base';
-import { createNewInput, getColsValuesFromDefaultValues, getFileteredInnerInputsValues, removeColumnInput, transformColumnsInputsToObject, validateInput } from '@/utils';
+import {
+  createNewInput,
+  getColsValuesFromDefaultValues,
+  getFileteredInnerInputsValues,
+  removeColumnInput,
+  transformColumnsInputsToObject,
+  validateInput,
+} from '@/utils';
+import { ArrowIcon } from '../icons';
 
 interface CreateNewTaskValue {
   title: string;
@@ -14,21 +22,19 @@ interface CreateNewTaskValue {
   [key: string]: string;
 }
 
-export function TaskForm(
-  { 
-    defaultValues,
-    columns 
-  } : {
-    defaultValues?: Task | null ,
-    columns: Column[]
-  }
-  ) {
+export function TaskForm({
+  defaultValues,
+  columns,
+}: {
+  defaultValues?: Task | null;
+  columns: Column[];
+}) {
   const dispatch = useAppDispatch();
   const [formInputs, setFormInputs] = useState(taskFormInfo);
   const taskStatusOptions = columns.map((col) => col.name);
 
   const [initialValues] = useState<CreateNewTaskValue>(() => {
-    if (defaultValues == null) {        
+    if (defaultValues == null) {
       const columnsInputs = transformColumnsInputsToObject(formInputs[2].inputs, '');
       return {
         title: '',
@@ -66,21 +72,21 @@ export function TaskForm(
   });
 
   const colsSchema = transformColumnsInputsToObject(
-    formInputs[2].inputs, 
-    Yup.string().min(3, 'please enter at least 3 characters').required("Can't be empty")
-  );  
+    formInputs[2].inputs,
+    Yup.string().min(3, 'please enter at least 3 characters').required("Can't be empty"),
+  );
 
   const TaskFormSchema = Yup.object().shape({
     title: Yup.string().min(3, 'please enter at least 3 characters').required("Can't be empty"),
     description: Yup.string().min(10, 'please enter at least 10 characters'),
-    status: Yup.string().required("please select a status"),
+    status: Yup.string().required('please select a status'),
     ...colsSchema,
   });
 
   const createNewColumn = () => {
     const newFormInputs = formInputs.map((input) => {
       if (input.inputs) {
-        let newInnerInput = createNewInput(taskFormInfo[2].inputs, input);
+        const newInnerInput = createNewInput(taskFormInfo[2].inputs, input);
         return { ...input, inputs: [...input.inputs, newInnerInput] };
       }
       return input;
@@ -108,10 +114,11 @@ export function TaskForm(
     console.log('On Create: \n');
     console.dir({ values, formInputs, defaultValues, initialValues });
 
-    const {
-      filteredInnerInpsValues,
-      existInpsValues 
-    } = getFileteredInnerInputsValues(formInputs[2].inputs, values, defaultValues?.subtasks);
+    const { filteredInnerInpsValues, existInpsValues } = getFileteredInnerInputsValues(
+      formInputs[2].inputs,
+      values,
+      defaultValues?.subtasks,
+    );
 
     dispatch(
       saveTask({
@@ -124,21 +131,17 @@ export function TaskForm(
             return {
               id: `${idx + 1}`,
               title,
-              isCompleted: existInpsValues?.[idx]?.isCompleted || false,            
+              isCompleted: existInpsValues?.[idx]?.isCompleted || false,
             };
           }),
-        }}
-      )
+        },
+      }),
     );
     setSubmitting(false);
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={TaskFormSchema}
-      onSubmit={onSave}
-    >
+    <Formik initialValues={initialValues} validationSchema={TaskFormSchema} onSubmit={onSave}>
       {({ isSubmitting, getFieldMeta, values, handleChange, handleBlur }) => (
         <Form className="flex flex-col gap-8">
           {formInputs.map((input) => (
@@ -149,35 +152,27 @@ export function TaskForm(
 
               {!input.inputs && input.type !== 'select' ? (
                 <div className="relative">
-                <InputField
-                  className={`${
-                    validateInput(input.name, getFieldMeta)
-                      ? 'border-primary-base'
-                      : getFieldMeta(input.name).touched &&
-                        getFieldMeta(input.name).error &&
-                        'border-danger'
-                  }`}
-                  type={input.type}
-                  id={input.id}
-                  name={input.name}
-                  value={values[input.name]}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  placeholder={input.placeholder || ''}
-                />
-                <ErrorMessageWrapper input={input.name} hasIcon />
+                  <InputField
+                    className={`${
+                      validateInput(input.name, getFieldMeta)
+                        ? 'border-primary-base'
+                        : getFieldMeta(input.name).touched &&
+                          getFieldMeta(input.name).error &&
+                          'border-danger'
+                    }`}
+                    type={input.type}
+                    id={input.id}
+                    name={input.name}
+                    value={values[input.name]}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    placeholder={input.placeholder || ''}
+                  />
+                  <ErrorMessageWrapper input={input.name} hasIcon />
                 </div>
-
               ) : input.type === 'select' ? (
                 <div className="relative">
-                  <svg
-                    className="absolute top-[50%] right-6 translate-y-[-50%]"
-                    width="10"
-                    height="7"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path stroke="#635FC7" strokeWidth="2" fill="none" d="m1 1 4 4 4-4" />
-                  </svg>
+                  <ArrowIcon className="absolute top-[50%] right-6 translate-y-[-50%]" />
 
                   <InputField
                     className="appearance-none py-2 px-2.5"
@@ -196,7 +191,7 @@ export function TaskForm(
                       >
                         {option}
                       </option>
-                    ))}                                          
+                    ))}
                   </InputField>
                   <ErrorMessageWrapper input={input.name} hasIcon />
                 </div>
@@ -251,6 +246,6 @@ export function TaskForm(
           </Button>
         </Form>
       )}
-    </Formik>    
+    </Formik>
   );
 }
